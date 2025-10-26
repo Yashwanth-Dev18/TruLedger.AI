@@ -334,8 +334,8 @@ def main():
     # 🏦 HEADER SECTION
     # =============================================
     
-    st.markdown('<h1 class="main-header">🏦 TruLedger</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">Advanced AI-Powered Fraud Detection & Explainable Analytics Platform</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">TruLedger.AI </h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">An Explainable AI Prototype for ML-powered Financial Fraud Detection</p>', unsafe_allow_html=True)
     
     # =============================================
     # 🔧 TECHNOLOGIES SECTION

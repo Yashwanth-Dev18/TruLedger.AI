@@ -1,0 +1,149 @@
+
+AUTOENCODER's PERFORMANCE:
+
+              precision    recall  f1-score   support
+
+           0       0.99      0.99      0.99   1289169
+           1       0.06      0.11      0.08      7506
+
+    accuracy                           0.99   1296675
+   macro avg       0.53      0.55      0.54   1296675
+weighted avg       0.99      0.99      0.99   1296675
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ISOLATION FOREST's PERFORMANCE:
+
+              precision    recall  f1-score   support
+
+           0       1.00      0.98      0.99   1289169
+           1       0.07      0.24      0.11      7506
+
+    accuracy                           0.98   1296675
+   macro avg       0.53      0.61      0.55   1296675
+weighted avg       0.99      0.98      0.98   1296675
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+XGBOOST's PERFORMANCE:
+
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      1.00    386751
+           1       0.38      0.97      0.54      2252
+
+    accuracy                           0.99    389003
+   macro avg       0.69      0.98      0.77    389003
+weighted avg       1.00      0.99      0.99    389003
+
+Dataset shape: (1296675, 93)
+Fraud rate: 0.0058
+Train fraud rate: 0.0058
+Test fraud rate: 0.0058
+Fraud ratio (normal:fraud): 171.8:1
+
+Top 10 Most Important Features:
+                 feature  importance
+1                    amt    0.119334
+9   TXNctg_gas_transport    0.111348
+0               txn_time    0.061526
+7     TXNctg_grocery_net    0.058232
+6    TXNctg_shopping_net    0.042979
+13           TXNctg_home    0.041408
+12  TXNctg_entertainment    0.041129
+8     TXNctg_food_dining    0.036245
+15   TXNctg_shopping_pos    0.033531
+4     TXNctg_grocery_pos    0.033369
+
+ Testing Different Thresholds:
+Threshold 0.3: Fraud Recall = 0.9791
+Threshold 0.5: Fraud Recall = 0.9671
+Threshold 0.7: Fraud Recall = 0.9503
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+XGBOOST VERSION 2.0's PERFORMANCE:
+
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00    257834
+           1       0.73      0.89      0.80      1501
+
+    accuracy                           1.00    259335
+   macro avg       0.87      0.95      0.90    259335
+weighted avg       1.00      1.00      1.00    259335
+
+Dataset shape: (1296675, 93)
+Fraud rate: 0.0058
+
+
+DEFAULT THRESHOLD (0.5) - TEST SET RESULTS:
+CONFUSION MATRIX:
+[[255603   2231]
+ [    56   1445]]
+
+CLASSIFICATION REPORT:
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      1.00    257834
+           1       0.39      0.96      0.56      1501
+
+    accuracy                           0.99    259335
+   macro avg       0.70      0.98      0.78    259335
+weighted avg       1.00      0.99      0.99    259335
+
+
+Top 10 Most Important Features:
+                 feature  importance
+1                    amt    0.117112
+9   TXNctg_gas_transport    0.113042
+0               txn_time    0.059849
+7     TXNctg_grocery_net    0.057505
+12  TXNctg_entertainment    0.038716
+13           TXNctg_home    0.037343
+6    TXNctg_shopping_net    0.035971
+8     TXNctg_food_dining    0.035070
+4     TXNctg_grocery_pos    0.033072
+15   TXNctg_shopping_pos    0.031887
+
+FINE-TUNING THRESHOLDS (Using Validation Set):
+
+THRESHOLD COMPARISON (Validation Set):
+   threshold  precision  recall      f1  false_positives  false_positive_rate  frauds_caught  frauds_missed
+0        0.1     0.1499  0.9867  0.2602             8401               0.0326           1481             20
+1        0.2     0.2180  0.9807  0.3567             5281               0.0205           1472             29
+2        0.3     0.2759  0.9753  0.4301             3843               0.0149           1464             37
+3        0.4     0.3311  0.9647  0.4930             2925               0.0113           1448             53
+4        0.5     0.3885  0.9600  0.5532             2268               0.0088           1441             60
+5        0.6     0.4488  0.9527  0.6102             1756               0.0068           1430             71
+6        0.7     0.5218  0.9420  0.6716             1296               0.0050           1414             87
+7        0.8     0.6090  0.9307  0.7362              897               0.0035           1397            104
+8        0.9     0.7327  0.8914  0.8043              488               0.0019           1338            163
+
+OPTIMAL THRESHOLD: 0.900 (maximizes F1-score)
+   At this threshold:
+   - Precision: 0.733
+   - Recall: 0.891
+   - F1-score: 0.804
+   - False Positives: 488
+   - Frauds Caught: 1338/1501
+
+APPLYING OPTIMAL THRESHOLD (0.900) TO TEST SET:
+OPTIMAL CONFUSION MATRIX (Test Set):
+[[257342    492]
+ [   161   1340]]
+
+
+COMPARISON: Default vs Optimal Threshold
+Default (0.5)  - Frauds Caught: 1445/1501, False Positives: 2231
+Optimal (0.900) - Frauds Caught: 1340/1501, False Positives: 492
+
+-------------------------------------------------------------------------------------------------------------------------------------------

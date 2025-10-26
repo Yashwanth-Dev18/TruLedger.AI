@@ -17,11 +17,18 @@ class SimpleFallbackDetector:
     def predict_proba(self, X):
         """Predict fraud probabilities using simple rules"""
         probas = []
-        for _, row in X.iterrows():
+        
+        # Convert to DataFrame if it's a numpy array
+        if isinstance(X, np.ndarray):
+            X_df = pd.DataFrame(X)
+        else:
+            X_df = X
+            
+        for _, row in X_df.iterrows():
             risk_score = 0.0
             
             # Amount-based risk
-            amount = row.get('amt', 0)
+            amount = row.get('amt', 0) if hasattr(row, 'get') else (row[0] if len(row) > 0 else 0)
             if amount > 1000:
                 risk_score += 0.6
             elif amount > 500:
@@ -30,18 +37,27 @@ class SimpleFallbackDetector:
                 risk_score += 0.2
             
             # Time anomaly risk
-            time_diff = abs(row.get('txn_time', 12) - row.get('avg_txn_time', 12))
+            txn_time_idx = 1 if len(row) > 1 else 0
+            avg_txn_time_idx = 2 if len(row) > 2 else 0
+            
+            txn_time = row.get('txn_time', 12) if hasattr(row, 'get') else (row[txn_time_idx] if len(row) > txn_time_idx else 12)
+            avg_txn_time = row.get('avg_txn_time', 12) if hasattr(row, 'get') else (row[avg_txn_time_idx] if len(row) > avg_txn_time_idx else 12)
+            
+            time_diff = abs(txn_time - avg_txn_time)
             if time_diff > 8:
                 risk_score += 0.3
             elif time_diff > 4:
                 risk_score += 0.15
             
             # Distance anomaly risk (if available)
-            if 'distance' in row and 'avg_merchant_distance' in row:
-                if row['distance'] > row['avg_merchant_distance'] * 3:
-                    risk_score += 0.4
-                elif row['distance'] > row['avg_merchant_distance'] * 2:
-                    risk_score += 0.2
+            if hasattr(row, 'get'):
+                if 'distance' in row and 'avg_merchant_distance' in row:
+                    distance = row['distance']
+                    avg_distance = row['avg_merchant_distance']
+                    if distance > avg_distance * 3:
+                        risk_score += 0.4
+                    elif distance > avg_distance * 2:
+                        risk_score += 0.2
             
             # Cap at 0.95
             risk_score = min(risk_score, 0.95)
@@ -118,8 +134,13 @@ def run_fraud_detection(processed_file_path):
         else:
             X_scaled = X.values
         
-        # Get predictions
-        y_proba = components['model'].predict_proba(X_scaled)
+        # Get predictions - ensure we pass DataFrame to fallback detector
+        if isinstance(components['model'], SimpleFallbackDetector):
+            # For fallback detector, use DataFrame
+            y_proba = components['model'].predict_proba(X)
+        else:
+            # For real model, use scaled features
+            y_proba = components['model'].predict_proba(X_scaled)
         
         # Handle different probability array shapes
         if y_proba.ndim == 2 and y_proba.shape[1] >= 2:

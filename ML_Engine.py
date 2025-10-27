@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import json
+from LLM_XAI import FraudExplainer
 
 try:
     import joblib
@@ -179,8 +180,15 @@ def run_fraud_detection(processed_file_path):
         viz_data = generate_visualization_data(df, fraud_mask, fraud_proba)
         with open('app_visualization_data.json', 'w') as f:
             json.dump(viz_data, f, indent=2)
+    
+        print("🤖 Generating fraud explanations...")
+        explanation_success = generate_fraud_explanations()
         
-        print("✅ Fraud detection completed successfully")
+        if explanation_success:
+            print("✅ Fraud explanations generated successfully")
+        else:
+            print("⚠️ Using rule-based explanations only")
+        
         return True
         
     except Exception as e:
@@ -246,6 +254,49 @@ def generate_visualization_data(df, fraud_mask, fraud_proba=None):
             'detection_rate': float(fraud_mask.sum() / len(df))
         }
     }
+
+
+# Then add this function to ML_Engine.py
+def generate_fraud_explanations(fraud_df_path='detected_fraud_transactions.csv'):
+    """Generate LLM explanations for detected fraud transactions"""
+    try:
+        from LLM_XAI import FraudExplainer
+        
+        # Check if fraud transactions exist
+        if not os.path.exists(fraud_df_path):
+            print("❌ No fraud transactions found for explanations")
+            return False
+        
+        fraud_df = pd.read_csv(fraud_df_path)
+        
+        if fraud_df.empty:
+            print("❌ No fraud transactions to explain")
+            return False
+        
+        # Initialize explainer (without API key - will use rule-based)
+        explainer = FraudExplainer()
+        
+        # Generate explanations
+        explanations = explainer.generate_batch_explanations(fraud_df, max_explanations=10)
+        
+        # Save explanations
+        output_data = {
+            'generated_at': pd.Timestamp.now().isoformat(),
+            'total_transactions': len(explanations),
+            'explanations': explanations
+        }
+        
+        with open('llm_fraud_explanations.json', 'w') as f:
+            json.dump(output_data, f, indent=2)
+        
+        print(f"💾 Generated {len(explanations)} fraud explanations")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error generating fraud explanations: {e}")
+        return False
+
+
 
 # Standalone testing
 if __name__ == "__main__":

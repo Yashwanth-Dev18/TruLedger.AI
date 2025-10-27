@@ -43,7 +43,7 @@ st.markdown("""
     
     /* Global Styles - BLACK BACKGROUND */
     .stApp {
-        background: #101317;
+        background: #142030;
         font-family: 'Inter', sans-serif;
         color: #ffffff;
     }

@@ -585,19 +585,10 @@ def main():
     
     selected_key = st.selectbox(
         "💡 Upload anything from Credit Card Transactions to Bank's Finance Records! ",
+        "⚠️ This is a prototype. Please upload from pre-uploaded datasets. Why? :- Due to potential data heterogenity conflicts.",
         options=list(dataset_options.keys()),
-        help="Choose a dataset to analyze"
+        help="Choose a pre-uploaded dataset to run the pipeline on."
     )
-    
-    if selected_key:
-        info = dataset_options[selected_key]
-        st.markdown(f"""
-        <div class="dataset-card">
-            <h3>📊 {selected_key}</h3>
-            <p><strong>Description:</strong> {info['desc']}</p>
-            <p><strong>Records:</strong> {info['records']}</p>
-        </div>
-        """, unsafe_allow_html=True)
     
     # Run Pipeline Button
     if st.button("📌 Upload", type="primary"):

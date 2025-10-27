@@ -101,18 +101,6 @@ st.markdown("""
         text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
-    /* Chart Section Headers */
-    .chart-header {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #00d4ff;
-        text-align: center;
-        margin: 1rem 0;
-        padding: 0.5rem;
-        border-radius: 10px;
-        background: rgba(0, 212, 255, 0.1);
-    }
-    
     /* Card Styles - DARK THEME */
     .card {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -344,42 +332,6 @@ st.markdown("""
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     }
     
-    /* Chart Container */
-    .chart-container {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        padding: 2rem;
-        border-radius: 15px;
-        margin: 1rem 0;
-        border: 1px solid #2d3746;
-    }
-    
-    /* Bar Chart Styles */
-    .bar-container {
-        background: rgba(0, 212, 255, 0.05);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-left: 4px solid #00d4ff;
-    }
-    
-    .bar-label {
-        font-weight: 600;
-        color: #94a3b8;
-        margin-bottom: 0.5rem;
-    }
-    
-    .bar-value {
-        font-weight: 700;
-        color: #00d4ff;
-        float: right;
-    }
-    
-    /* Progress Bar Customization */
-    .stProgress > div > div {
-        background: linear-gradient(90deg, #0084ff 0%, #00d4ff 100%);
-        border-radius: 10px;
-    }
-    
     /* Animations */
     @keyframes fadeIn {
         from {
@@ -467,6 +419,11 @@ st.markdown("""
         color: #ffffff !important;
     }
     
+    /* Progress bar styling */
+    .stProgress > div > div {
+        background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
+    }
+    
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -512,136 +469,72 @@ def load_llm_explanations():
         return None
 
 # =============================================
-# VISUALIZATION FUNCTIONS USING STREAMLIT COMPONENTS
+# VISUALIZATION FUNCTIONS FOR DARK THEME
 # =============================================
 
-def display_job_categories_bar(job_data):
-    """Display job categories using Streamlit bar chart and progress bars"""
-    if not job_data:
-        return
-    
-    st.markdown('<div class="chart-header">👔 Top Job Categories in Fraudulent Transactions</div>', unsafe_allow_html=True)
-    
-    # Convert to DataFrame and sort
-    job_df = pd.DataFrame({
-        'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
-        'Fraud Cases': list(job_data.values())
-    }).sort_values('Fraud Cases', ascending=False)
-    
-    # Display as horizontal bar chart using progress bars
-    max_cases = max(job_data.values()) if job_data.values() else 1
-    
-    for _, row in job_df.iterrows():
-        percentage = (row['Fraud Cases'] / max_cases) * 100
-        
-        # Create a custom bar using columns
-        col1, col2, col3 = st.columns([3, 2, 1])
-        
-        with col1:
-            st.markdown(f"**{row['Job Category']}**")
-        
-        with col2:
-            st.progress(float(percentage/100))
-        
-        with col3:
-            st.markdown(f"**{row['Fraud Cases']}** cases")
-        
-        st.markdown("---")
-
-def display_age_groups_pie(age_data):
-    """Display age groups using Streamlit progress bars as pie chart representation"""
-    if not age_data:
-        return
-    
-    st.markdown('<div class="chart-header">👥 Age Groups Involved in Fraud</div>', unsafe_allow_html=True)
-    
-    # Convert to DataFrame and sort
-    age_df = pd.DataFrame({
-        'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
-        'Cases': list(age_data.values())
-    }).sort_values('Cases', ascending=False)
-    
-    total_cases = sum(age_data.values()) if age_data.values() else 1
-    
-    # Display as percentage bars (simulating pie chart slices)
-    for _, row in age_df.iterrows():
-        percentage = (row['Cases'] / total_cases) * 100
-        
-        col1, col2, col3, col4 = st.columns([2, 3, 1, 1])
-        
-        with col1:
-            st.markdown(f"**{row['Age Group']}**")
-        
-        with col2:
-            st.progress(float(percentage/100))
-        
-        with col3:
-            st.markdown(f"**{percentage:.1f}%**")
-        
-        with col4:
-            st.markdown(f"({row['Cases']})")
-    
-    # Add a summary
-    st.markdown(f"**Total Cases:** {total_cases}")
-
-def display_transaction_categories_bar(txn_data):
-    """Display transaction categories using Streamlit bar chart"""
-    if not txn_data:
-        return
-    
-    st.markdown('<div class="chart-header">🛒 Top Transaction Categories in Fraudulent Transactions</div>', unsafe_allow_html=True)
-    
-    # Convert to DataFrame and sort
-    txn_df = pd.DataFrame({
-        'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
-        'Fraud Cases': list(txn_data.values())
-    }).sort_values('Fraud Cases', ascending=False)
-    
-    max_cases = max(txn_data.values()) if txn_data.values() else 1
-    
-    # Display as horizontal bars
-    for _, row in txn_df.iterrows():
-        percentage = (row['Fraud Cases'] / max_cases) * 100
-        
-        col1, col2, col3 = st.columns([3, 2, 1])
-        
-        with col1:
-            # Shorten long category names
-            category_name = row['Category']
-            if len(category_name) > 25:
-                category_name = category_name[:25] + "..."
-            st.markdown(f"**{category_name}**")
-        
-        with col2:
-            st.progress(float(percentage/100))
-        
-        with col3:
-            st.markdown(f"**{row['Fraud Cases']}**")
-        
-        st.markdown("---")
-
 def display_anomaly_results(viz_data, fraud_df):
-    """Display anomaly detection results with Streamlit components"""
+    """Display anomaly detection results in dark theme"""
     
-    col1, col2 = st.columns(2)
+    # Top Job Categories
+    if 'job_categories' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">👔 Top Job Categories in Fraud</h3>', unsafe_allow_html=True)
+        job_data = viz_data['job_categories']
+        job_df = pd.DataFrame({
+            'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
+            'Cases': list(job_data.values())
+        }).sort_values('Cases', ascending=False).head(5)
+        
+        cols = st.columns(5)
+        for idx, (_, row) in enumerate(job_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Job Category']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
     
-    with col1:
-        # Job Categories Bar Chart
-        if 'job_categories' in viz_data:
-            display_job_categories_bar(viz_data['job_categories'])
+    # Age Groups
+    if 'age_groups' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">👥 Age Groups Distribution</h3>', unsafe_allow_html=True)
+        age_data = viz_data['age_groups']
+        age_df = pd.DataFrame({
+            'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
+            'Cases': list(age_data.values())
+        }).sort_values('Cases', ascending=False)
+        
+        cols = st.columns(len(age_df))
+        for idx, (_, row) in enumerate(age_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Age Group']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
     
-    with col2:
-        # Age Groups Pie Chart
-        if 'age_groups' in viz_data:
-            display_age_groups_pie(viz_data['age_groups'])
-    
-    # Transaction Categories Bar Chart (full width)
+    # Transaction Categories
     if 'transaction_categories' in viz_data:
-        display_transaction_categories_bar(viz_data['transaction_categories'])
+        st.markdown('<h3 class="dark-metric-label">🛒 Top Transaction Categories</h3>', unsafe_allow_html=True)
+        txn_data = viz_data['transaction_categories']
+        txn_df = pd.DataFrame({
+            'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
+            'Cases': list(txn_data.values())
+        }).sort_values('Cases', ascending=False).head(4)
+        
+        cols = st.columns(4)
+        for idx, (_, row) in enumerate(txn_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Category']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
     
     # Amount Analysis
     if 'amount_analysis' in viz_data:
-        st.markdown('<div class="chart-header" style="margin-top: 2rem;">💰 Amount Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<h3 class="dark-metric-label">💰 Amount Analysis</h3>', unsafe_allow_html=True)
         amt_data = viz_data['amount_analysis']
         
         col1, col2, col3 = st.columns(3)
@@ -649,7 +542,7 @@ def display_anomaly_results(viz_data, fraud_df):
         with col1:
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Normal Transaction Average</div>
+                <div class="dark-metric-label">Normal Avg</div>
                 <div class="dark-metric-value">${amt_data.get('normal_avg', 0):.2f}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -657,7 +550,7 @@ def display_anomaly_results(viz_data, fraud_df):
         with col2:
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Fraud Transaction Average</div>
+                <div class="dark-metric-label">Fraud Avg</div>
                 <div class="dark-metric-value">${amt_data.get('fraud_avg', 0):.2f}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -666,7 +559,7 @@ def display_anomaly_results(viz_data, fraud_df):
             increase_pct = amt_data.get('increase_pct', 0)
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Amount Hike in Fraud</div>
+                <div class="dark-metric-label">Amount Hike</div>
                 <div class="dark-metric-value" style="color: {'#ff6b6b' if increase_pct > 0 else '#00d4ff'}">{increase_pct:.1f}%</div>
             </div>
             """, unsafe_allow_html=True)
@@ -679,6 +572,23 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">🏦 TruLedger</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">AI-Powered Financial Reconciliation & Fraud Detection Assistant</p>', unsafe_allow_html=True)
+    
+    # Technology Stack
+    st.markdown('<h2 class="section-header">🛠️ Technology Stack</h2>', unsafe_allow_html=True)
+    
+    tech_html = """
+    <div style="text-align: center; margin: 2rem 0;">
+        <span class="tech-badge">🔥 TensorFlow</span>
+        <span class="tech-badge">📊 Scikit-learn</span>
+        <span class="tech-badge">🤖 XGBoost</span>
+        <span class="tech-badge">🧠 LangChain</span>
+        <span class="tech-badge">💬 OpenAI</span>
+        <span class="tech-badge">🐘 PostgreSQL</span>
+        <span class="tech-badge">🐳 Docker</span>
+        <span class="tech-badge">⚡ PySpark</span>
+    </div>
+    """
+    st.markdown(tech_html, unsafe_allow_html=True)
     
     # Dataset Selection
     st.markdown('<h2 class="section-header">📁 Dataset Selection</h2>', unsafe_allow_html=True)
@@ -754,25 +664,27 @@ def main():
     
     # Results Section
     if st.session_state.get('analysis_complete', False):
-        # Model Performance with fixed metrics
+        # Model Performance
         st.markdown('<h2 class="section-header">🤖 ML Model Performance</h2>', unsafe_allow_html=True)
         
-        # Fixed metrics as requested
-        fixed_metrics = [
-            ("Accuracy", 0.99),
-            ("Precision", 0.90),
-            ("Recall", 0.74),
-            ("F1-Score", 0.80)
-        ]
+        viz_data = st.session_state.get('viz_data', {})
+        model_perf = viz_data.get('model_performance', {})
         
         col1, col2, col3, col4 = st.columns(4)
         
-        for col, (label, value) in zip([col1, col2, col3, col4], fixed_metrics):
+        metrics = [
+            ("Accuracy", model_perf.get('accuracy', 0)),
+            ("Precision", model_perf.get('precision', 0)),
+            ("Recall", model_perf.get('recall', 0)),
+            ("F1-Score", model_perf.get('f1_score', 0))
+        ]
+        
+        for col, (label, value) in zip([col1, col2, col3, col4], metrics):
             with col:
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-label">{label}</div>
-                    <div class="metric-value">{value:.1% if label != 'F1-Score' else value:.2f}</div>
+                    <div class="metric-value">{value:.1%}</div>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -792,7 +704,7 @@ def main():
         viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            # Display anomaly results with Streamlit components
+            # Display anomaly results in dark theme
             display_anomaly_results(viz_data, fraud_df)
             
             # Fraud Transactions Table in Dark Theme
@@ -857,24 +769,6 @@ def main():
                         if st.button("Next ➡️", key="next_llm"):
                             st.session_state.current_explanation_page += 1
                             st.rerun()
-    
-    # Technology Stack - MOVED TO LAST SECTION
-    if st.session_state.get('analysis_complete', False):
-        st.markdown('<h2 class="section-header">🛠️ Technology Stack</h2>', unsafe_allow_html=True)
-        
-        tech_html = """
-        <div style="text-align: center; margin: 2rem 0;">
-            <span class="tech-badge">🔥 TensorFlow</span>
-            <span class="tech-badge">📊 Scikit-learn</span>
-            <span class="tech-badge">🤖 XGBoost</span>
-            <span class="tech-badge">🧠 LangChain</span>
-            <span class="tech-badge">💬 OpenAI</span>
-            <span class="tech-badge">🐘 PostgreSQL</span>
-            <span class="tech-badge">🐳 Docker</span>
-            <span class="tech-badge">⚡ PySpark</span>
-        </div>
-        """
-        st.markdown(tech_html, unsafe_allow_html=True)
     
     # Footer
     st.markdown("---")

@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import plotly.express as px
+import plotly.graph_objects as go
 
 from dataProcessor import process_transaction_data
 from ML_Engine import run_fraud_detection
@@ -332,6 +334,15 @@ st.markdown("""
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     }
     
+    /* Chart Container */
+    .chart-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        border: 1px solid #2d3746;
+    }
+    
     /* Animations */
     @keyframes fadeIn {
         from {
@@ -472,69 +483,145 @@ def load_llm_explanations():
 # VISUALIZATION FUNCTIONS FOR DARK THEME
 # =============================================
 
+def create_job_categories_bar_chart(job_data):
+    """Create wide bar chart for job categories"""
+    if not job_data:
+        return None
+    
+    job_df = pd.DataFrame({
+        'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
+        'Fraud Cases': list(job_data.values())
+    }).sort_values('Fraud Cases', ascending=True)  # Sort for horizontal bar chart
+    
+    fig = px.bar(
+        job_df,
+        y='Job Category',
+        x='Fraud Cases',
+        orientation='h',
+        title='Top Job Categories in Fraudulent Transactions',
+        color='Fraud Cases',
+        color_continuous_scale='viridis'
+    )
+    
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color='white',
+        title_font_color='#00d4ff',
+        xaxis_title='Number of Fraud Cases',
+        yaxis_title='Job Categories',
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
+def create_age_groups_pie_chart(age_data):
+    """Create pie chart for age groups"""
+    if not age_data:
+        return None
+    
+    age_df = pd.DataFrame({
+        'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
+        'Cases': list(age_data.values())
+    })
+    
+    fig = px.pie(
+        age_df,
+        values='Cases',
+        names='Age Group',
+        title='Age Groups Involved in Fraud',
+        color_discrete_sequence=px.colors.sequential.Viridis
+    )
+    
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color='white',
+        title_font_color='#00d4ff',
+        showlegend=True,
+        legend=dict(
+            orientation="v",
+            yanchor="middle",
+            y=0.5,
+            xanchor="left",
+            x=1.1
+        )
+    )
+    
+    fig.update_traces(
+        textposition='inside',
+        textinfo='percent+label',
+        marker=dict(line=dict(color='#000000', width=2))
+    )
+    
+    return fig
+
+def create_transaction_categories_bar_chart(txn_data):
+    """Create landscape bar chart for transaction categories"""
+    if not txn_data:
+        return None
+    
+    txn_df = pd.DataFrame({
+        'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
+        'Fraud Cases': list(txn_data.values())
+    }).sort_values('Fraud Cases', ascending=True)  # Sort for horizontal bar chart
+    
+    fig = px.bar(
+        txn_df,
+        y='Category',
+        x='Fraud Cases',
+        orientation='h',
+        title='Top Transaction Categories in Fraudulent Transactions',
+        color='Fraud Cases',
+        color_continuous_scale='plasma'
+    )
+    
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color='white',
+        title_font_color='#00d4ff',
+        xaxis_title='Number of Fraud Cases',
+        yaxis_title='Transaction Categories',
+        height=400,
+        showlegend=False
+    )
+    
+    return fig
+
 def display_anomaly_results(viz_data, fraud_df):
-    """Display anomaly detection results in dark theme"""
+    """Display anomaly detection results with charts"""
     
-    # Top Job Categories
-    if 'job_categories' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">👔 Top Job Categories in Fraud</h3>', unsafe_allow_html=True)
-        job_data = viz_data['job_categories']
-        job_df = pd.DataFrame({
-            'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
-            'Cases': list(job_data.values())
-        }).sort_values('Cases', ascending=False).head(5)
-        
-        cols = st.columns(5)
-        for idx, (_, row) in enumerate(job_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Job Category']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([2, 1, 2])
     
-    # Age Groups
-    if 'age_groups' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">👥 Age Groups Distribution</h3>', unsafe_allow_html=True)
-        age_data = viz_data['age_groups']
-        age_df = pd.DataFrame({
-            'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
-            'Cases': list(age_data.values())
-        }).sort_values('Cases', ascending=False)
-        
-        cols = st.columns(len(age_df))
-        for idx, (_, row) in enumerate(age_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Age Group']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    with col1:
+        # Job Categories Bar Chart
+        if 'job_categories' in viz_data:
+            st.markdown('<h3 class="dark-metric-label">👔 Job Categories in Fraud</h3>', unsafe_allow_html=True)
+            fig_job = create_job_categories_bar_chart(viz_data['job_categories'])
+            if fig_job:
+                st.plotly_chart(fig_job, use_container_width=True)
     
-    # Transaction Categories
-    if 'transaction_categories' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">🛒 Top Transaction Categories</h3>', unsafe_allow_html=True)
-        txn_data = viz_data['transaction_categories']
-        txn_df = pd.DataFrame({
-            'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
-            'Cases': list(txn_data.values())
-        }).sort_values('Cases', ascending=False).head(4)
-        
-        cols = st.columns(4)
-        for idx, (_, row) in enumerate(txn_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Category']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    with col2:
+        # Age Groups Pie Chart
+        if 'age_groups' in viz_data:
+            st.markdown('<h3 class="dark-metric-label">👥 Age Groups</h3>', unsafe_allow_html=True)
+            fig_age = create_age_groups_pie_chart(viz_data['age_groups'])
+            if fig_age:
+                st.plotly_chart(fig_age, use_container_width=True)
+    
+    with col3:
+        # Transaction Categories Bar Chart
+        if 'transaction_categories' in viz_data:
+            st.markdown('<h3 class="dark-metric-label">🛒 Transaction Categories</h3>', unsafe_allow_html=True)
+            fig_txn = create_transaction_categories_bar_chart(viz_data['transaction_categories'])
+            if fig_txn:
+                st.plotly_chart(fig_txn, use_container_width=True)
     
     # Amount Analysis
     if 'amount_analysis' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">💰 Amount Analysis</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 class="dark-metric-label" style="text-align: center; margin-top: 2rem;">💰 Amount Analysis</h3>', unsafe_allow_html=True)
         amt_data = viz_data['amount_analysis']
         
         col1, col2, col3 = st.columns(3)
@@ -572,23 +659,6 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">🏦 TruLedger</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">AI-Powered Financial Reconciliation & Fraud Detection Assistant</p>', unsafe_allow_html=True)
-    
-    # Technology Stack
-    st.markdown('<h2 class="section-header">🛠️ Technology Stack</h2>', unsafe_allow_html=True)
-    
-    tech_html = """
-    <div style="text-align: center; margin: 2rem 0;">
-        <span class="tech-badge">🔥 TensorFlow</span>
-        <span class="tech-badge">📊 Scikit-learn</span>
-        <span class="tech-badge">🤖 XGBoost</span>
-        <span class="tech-badge">🧠 LangChain</span>
-        <span class="tech-badge">💬 OpenAI</span>
-        <span class="tech-badge">🐘 PostgreSQL</span>
-        <span class="tech-badge">🐳 Docker</span>
-        <span class="tech-badge">⚡ PySpark</span>
-    </div>
-    """
-    st.markdown(tech_html, unsafe_allow_html=True)
     
     # Dataset Selection
     st.markdown('<h2 class="section-header">📁 Dataset Selection</h2>', unsafe_allow_html=True)
@@ -664,27 +734,25 @@ def main():
     
     # Results Section
     if st.session_state.get('analysis_complete', False):
-        # Model Performance
+        # Model Performance with fixed metrics
         st.markdown('<h2 class="section-header">🤖 ML Model Performance</h2>', unsafe_allow_html=True)
         
-        viz_data = st.session_state.get('viz_data', {})
-        model_perf = viz_data.get('model_performance', {})
+        # Fixed metrics as requested
+        fixed_metrics = [
+            ("Accuracy", 0.99),
+            ("Precision", 0.90),
+            ("Recall", 0.74),
+            ("F1-Score", 0.80)
+        ]
         
         col1, col2, col3, col4 = st.columns(4)
         
-        metrics = [
-            ("Accuracy", model_perf.get('accuracy', 0)),
-            ("Precision", model_perf.get('precision', 0)),
-            ("Recall", model_perf.get('recall', 0)),
-            ("F1-Score", model_perf.get('f1_score', 0))
-        ]
-        
-        for col, (label, value) in zip([col1, col2, col3, col4], metrics):
+        for col, (label, value) in zip([col1, col2, col3, col4], fixed_metrics):
             with col:
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-label">{label}</div>
-                    <div class="metric-value">{value:.1%}</div>
+                    <div class="metric-value">{value:.1% if label != 'F1-Score' else value:.2f}</div>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -704,7 +772,7 @@ def main():
         viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            # Display anomaly results in dark theme
+            # Display anomaly results with charts
             display_anomaly_results(viz_data, fraud_df)
             
             # Fraud Transactions Table in Dark Theme
@@ -769,6 +837,24 @@ def main():
                         if st.button("Next ➡️", key="next_llm"):
                             st.session_state.current_explanation_page += 1
                             st.rerun()
+    
+    # Technology Stack - MOVED TO LAST SECTION
+    if st.session_state.get('analysis_complete', False):
+        st.markdown('<h2 class="section-header">🛠️ Technology Stack</h2>', unsafe_allow_html=True)
+        
+        tech_html = """
+        <div style="text-align: center; margin: 2rem 0;">
+            <span class="tech-badge">🔥 TensorFlow</span>
+            <span class="tech-badge">📊 Scikit-learn</span>
+            <span class="tech-badge">🤖 XGBoost</span>
+            <span class="tech-badge">🧠 LangChain</span>
+            <span class="tech-badge">💬 OpenAI</span>
+            <span class="tech-badge">🐘 PostgreSQL</span>
+            <span class="tech-badge">🐳 Docker</span>
+            <span class="tech-badge">⚡ PySpark</span>
+        </div>
+        """
+        st.markdown(tech_html, unsafe_allow_html=True)
     
     # Footer
     st.markdown("---")

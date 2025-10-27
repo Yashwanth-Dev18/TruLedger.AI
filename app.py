@@ -566,7 +566,7 @@ def main():
             return
         
         # Step 2
-        status_text.markdown('<div class="processing-step">🔍 Running fraud detection...</div>', unsafe_allow_html=True)
+        status_text.markdown('<div class="processing-step">🔍 Running ML-powered anomaly detection...</div>', unsafe_allow_html=True)
         progress_bar.progress(50)
         success = run_fraud_detection(processed_file)
         
@@ -657,13 +657,13 @@ def main():
             risk_factors = explanation.get('risk_factors', [])
             confidence = explanation.get('confidence', 'high')
             explanation_text = explanation.get('explanation', 'No explanation available')
-            explanation_type = explanation.get('explanation_type', 'AI-Generated Reasoning')
+            explanation_type = explanation.get('explanation_type', 'ai_generated')
 
             confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
 
             st.markdown(f"""
             <div class="llm-card">
-                <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
+                <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id+1}</h4>
                 <p style="text-align: center;">
                     <strong style="color: #94a3b8;">Confidence:</strong> 
                     <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span> | 
@@ -674,7 +674,7 @@ def main():
                     <strong style="color: #94a3b8;">Risk Factors:</strong> 
                     <span style="color: white;">{', '.join(risk_factors)}</span>
                 </p>
-                <p style="text-align: center;"><strong style="color: #94a3b8;">AI Analysis:</strong></p>
+                <p style="text-align: center;"><strong style="color: #94a3b8;">AI-Generated Reasoning:</strong></p>
                 <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left;">
                     {explanation_text}
                 </p>

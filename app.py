@@ -33,7 +33,7 @@ st.set_page_config(
 )
 
 # =============================================
-# ENHANCED CSS STYLING WITH DARK ML SECTION
+# DARK THEME CSS STYLING
 # =============================================
 
 st.markdown("""
@@ -41,10 +41,17 @@ st.markdown("""
     /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     
-    /* Global Styles */
+    /* Global Styles - BLACK BACKGROUND */
     .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: #000000;
         font-family: 'Inter', sans-serif;
+        color: #ffffff;
+    }
+    
+    /* Main content area background */
+    .main .block-container {
+        background: #000000;
+        padding: 2rem;
     }
     
     /* Header Styles */
@@ -63,7 +70,7 @@ st.markdown("""
     
     .subtitle {
         font-size: 1.4rem;
-        color: #64748b;
+        color: #94a3b8;
         text-align: center;
         margin-bottom: 3rem;
         font-weight: 400;
@@ -74,11 +81,12 @@ st.markdown("""
     .section-header {
         font-size: 2rem;
         font-weight: 700;
-        color: #1e293b;
+        color: #00d4ff;
         margin: 3rem 0 1.5rem 0;
         padding-bottom: 0.75rem;
         border-bottom: 3px solid #0084ff;
         animation: slideInLeft 0.5s ease-out;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
     /* Dark Section Header */
@@ -93,20 +101,22 @@ st.markdown("""
         text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
-    /* Card Styles */
+    /* Card Styles - DARK THEME */
     .card {
-        background: white;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
         padding: 2rem;
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         margin: 1.5rem 0;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #2d3746;
         transition: all 0.3s ease;
     }
     
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 132, 255, 0.15);
+        box-shadow: 0 15px 40px rgba(0, 132, 255, 0.3);
+        border-color: #0084ff;
     }
     
     /* Dark Theme Cards */
@@ -117,7 +127,7 @@ st.markdown("""
         border-radius: 20px;
         margin: 1.5rem 0;
         border: 1px solid #2d3746;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         transition: all 0.3s ease;
     }
     
@@ -136,14 +146,14 @@ st.markdown("""
         text-align: center;
         margin: 1rem;
         border: 1px solid #2d3746;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         transition: all 0.3s ease;
     }
     
     .dark-metric-card:hover {
         transform: translateY(-5px);
         border-color: #0084ff;
-        box-shadow: 0 12px 35px rgba(0, 132, 255, 0.3);
+        box-shadow: 0 12px 35px rgba(0, 132, 255, 0.4);
     }
     
     .dark-metric-value {
@@ -170,13 +180,13 @@ st.markdown("""
         margin: 0.5rem;
         font-weight: 600;
         font-size: 0.9rem;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         transition: all 0.3s ease;
     }
     
     .tech-badge:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
     
     /* Dataset Card */
@@ -186,7 +196,8 @@ st.markdown("""
         padding: 2rem;
         border-radius: 20px;
         margin: 1.5rem 0;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .dataset-card h3 {
@@ -195,13 +206,14 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    /* Metric Card */
+    /* Metric Card - DARK THEME */
     .metric-card {
-        background: white;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
         padding: 2rem;
         border-radius: 15px;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         border-left: 4px solid #0084ff;
         transition: all 0.3s ease;
     }
@@ -209,18 +221,20 @@ st.markdown("""
     .metric-card:hover {
         transform: translateY(-5px);
         border-left-color: #00d4ff;
+        box-shadow: 0 12px 35px rgba(0, 132, 255, 0.4);
     }
     
     .metric-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #0084ff;
+        color: #00d4ff;
         margin: 0.5rem 0;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
     .metric-label {
         font-size: 1rem;
-        color: #64748b;
+        color: #94a3b8;
         font-weight: 500;
     }
     
@@ -233,8 +247,9 @@ st.markdown("""
         margin: 1rem 0;
         font-weight: 600;
         font-size: 1.1rem;
-        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
         animation: pulse 2s ease-in-out infinite;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     /* Fraud Alert Card */
@@ -244,7 +259,7 @@ st.markdown("""
         padding: 1.5rem;
         border-radius: 15px;
         margin: 1rem 0;
-        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
         border-left: 5px solid #ff4757;
     }
     
@@ -253,20 +268,22 @@ st.markdown("""
         margin-bottom: 0.5rem;
     }
     
-    /* LLM Explanation Card */
+    /* LLM Explanation Card - DARK THEME */
     .llm-card {
-        background: white;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
         padding: 2rem;
         border-radius: 15px;
         margin: 1.5rem 0;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         border-left: 5px solid #0084ff;
         transition: all 0.3s ease;
     }
     
     .llm-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 132, 255, 0.2);
+        box-shadow: 0 12px 35px rgba(0, 132, 255, 0.4);
         transform: translateX(5px);
+        border-left-color: #00d4ff;
     }
     
     /* Dark LLM Card */
@@ -277,12 +294,12 @@ st.markdown("""
         border-radius: 15px;
         margin: 1.5rem 0;
         border: 1px solid #2d3746;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         transition: all 0.3s ease;
     }
     
     .dark-llm-card:hover {
-        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.2);
+        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.3);
         transform: translateX(5px);
         border-color: #00d4ff;
     }
@@ -295,7 +312,8 @@ st.markdown("""
         border-radius: 20px;
         text-align: center;
         margin: 2rem 0;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .stats-highlight h3 {
@@ -311,7 +329,7 @@ st.markdown("""
         border-radius: 25px;
         margin: 3rem 0;
         border: 1px solid #2d3746;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     }
     
     /* Animations */
@@ -355,7 +373,7 @@ st.markdown("""
         }
     }
     
-    /* Button Overrides */
+    /* Button Overrides - DARK THEME */
     .stButton > button {
         background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
         color: white;
@@ -365,40 +383,51 @@ st.markdown("""
         font-weight: 600;
         font-size: 1.1rem;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 132, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 132, 255, 0.4);
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 132, 255, 0.4);
+        box-shadow: 0 6px 20px rgba(0, 132, 255, 0.6);
+        background: linear-gradient(135deg, #00d4ff 0%, #0084ff 100%);
     }
     
-    /* Selectbox Styling */
+    /* Selectbox Styling - DARK THEME */
     .stSelectbox > div > div {
         border-radius: 12px;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #2d3746;
         font-size: 1.1rem;
+        background: #1a1a2e;
+        color: white;
     }
     
-    /* Dataframe Styling */
+    /* Dataframe Styling - DARK THEME */
     .dataframe {
         border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        background: #1a1a2e !important;
     }
     
-    /* Dark Dataframe */
-    .dark-dataframe {
+    /* Streamlit component overrides for dark theme */
+    .stDataFrame {
         background: #1a1a2e !important;
-        color: white !important;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    
+    /* Text color overrides */
+    .stMarkdown, .stText, .stAlert, .stSuccess, .stWarning, .stError {
+        color: #ffffff !important;
+    }
+    
+    /* Progress bar styling */
+    .stProgress > div > div {
+        background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
     }
     
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    .stDeployButton {visibility: hidden;}
     
 </style>
 """, unsafe_allow_html=True)
@@ -734,7 +763,7 @@ def main():
                             st.session_state.current_explanation_page -= 1
                             st.rerun()
                 with col2:
-                    st.markdown(f'<p style="text-align: center; color: #64748b;">Page {current_page + 1} of {total_pages}</p>', unsafe_allow_html=True)
+                    st.markdown(f'<p style="text-align: center; color: #94a3b8;">Page {current_page + 1} of {total_pages}</p>', unsafe_allow_html=True)
                 with col3:
                     if end_idx < len(explanations):
                         if st.button("Next ➡️", key="next_llm"):
@@ -744,8 +773,8 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style='text-align: center; color: #64748b; padding: 2rem; font-size: 0.9rem;'>
-        <p style='font-weight: 600; font-size: 1.1rem;'>Developed by Yashwanth Krishna Devanaboina</p>
+    <div style='text-align: center; color: #94a3b8; padding: 2rem; font-size: 0.9rem;'>
+        <p style='font-weight: 600; font-size: 1.1rem; color: #00d4ff;'>Developed by Yashwanth Krishna Devanaboina</p>
         <p>Built with cutting-edge AI technologies for explainable fraud detection</p>
         <p style='margin-top: 1rem;'>© 2024 TruLedger AI | Enterprise-Grade Fraud Detection</p>
     </div>

@@ -584,8 +584,8 @@ def main():
     }
     
     selected_key = st.selectbox(
-        "💡 Upload anything from Credit Card Transactions to Bank's Finance Records. :)" \
-        "⚠️ This is a prototype. Please upload from pre-uploaded datasets. Why? :- Due to potential data heterogenity conflicts.",
+        "💡 Upload anything from Credit Card Transactions to Bank's Finance Records. :)                                                                           " \
+        "⚠️ This is a prototype. Please upload from pre-uploaded datasets to avoid formatting issues from users.",
         options=list(dataset_options),
         help="Choose a pre-uploaded dataset to run the pipeline on."
     )
@@ -649,8 +649,8 @@ def main():
         col1, col2, col3 = st.columns(3)
         
         metrics = [
-            ("Precision", model_perf.get('precision', 90)),
-            ("Recall", model_perf.get('recall', 75)),
+            ("Precision", model_perf.get('precision', 0.9)),
+            ("Recall", model_perf.get('recall', 0.75)),
             ("F1-Score", model_perf.get('f1_score', 0.81))
         ]
         
@@ -675,16 +675,21 @@ def main():
                 """, unsafe_allow_html=True)
         
         # Stats Highlight
-        st.markdown(f"""
+        st.markdown("""
         <div class="stats-highlight">
             <h3>🎯 Exceptional Detection Performance</h3>
-            <h3>Detected {len(fraud_df)} fraudulent transactions.</h3>
             <p>The XGBoost model achieves industrial-level fraud detection with minimal false claims</p>
         </div>
         """, unsafe_allow_html=True)
         
         # ML ANOMALY RESULTS SECTION - DARK THEME
         st.markdown('<h2 class="dark-section-header">📊 ML Anomaly Detection Results</h2>', unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div class="dark-section">
+            <h3>Detected {len(fraud_df)} fraudulent transactions.</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
         fraud_df = st.session_state.get('fraud_df', pd.DataFrame())
         viz_data = st.session_state.get('viz_data', {})

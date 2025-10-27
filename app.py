@@ -699,7 +699,7 @@ def main():
                             st.rerun()
 
     # Technology Stack
-    st.markdown('<h2 class="section-header">🛠️ Technology Stack</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header">🛠️ Tech Stack</h2>', unsafe_allow_html=True)
     
     tech_html = """
     <div style="text-align: center; margin: 2rem 0;">

@@ -89,16 +89,70 @@ st.markdown("""
         text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
-    /* Dark Section Header */
-    .dark-section-header {
-        font-size: 2.2rem;
+    /* Chart Container */
+    .chart-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        border: 1px solid #2d3746;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    }
+    
+    /* Bar Chart Styles */
+    .bar-item {
+        background: rgba(0, 212, 255, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-left: 4px solid #00d4ff;
+        transition: all 0.3s ease;
+    }
+    
+    .bar-item:hover {
+        background: rgba(0, 212, 255, 0.2);
+        transform: translateX(5px);
+    }
+    
+    .bar-label {
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .bar-value {
         font-weight: 700;
         color: #00d4ff;
-        margin: 2rem 0 1.5rem 0;
-        padding-bottom: 0.75rem;
-        border-bottom: 3px solid #00d4ff;
-        text-align: center;
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        float: right;
+    }
+    
+    /* Pie Chart Styles */
+    .pie-slice {
+        background: rgba(0, 212, 255, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-left: 4px solid;
+        transition: all 0.3s ease;
+    }
+    
+    .pie-slice:hover {
+        transform: scale(1.02);
+    }
+    
+    .pie-label {
+        font-weight: 600;
+        color: #94a3b8;
+    }
+    
+    .pie-percentage {
+        font-weight: 700;
+        float: right;
+    }
+    
+    .pie-count {
+        color: #64748b;
+        font-size: 0.9rem;
     }
     
     /* Card Styles - DARK THEME */
@@ -117,24 +171,6 @@ st.markdown("""
         transform: translateY(-5px);
         box-shadow: 0 15px 40px rgba(0, 132, 255, 0.3);
         border-color: #0084ff;
-    }
-    
-    /* Dark Theme Cards */
-    .dark-card {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        color: white;
-        padding: 2rem;
-        border-radius: 20px;
-        margin: 1.5rem 0;
-        border: 1px solid #2d3746;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        transition: all 0.3s ease;
-    }
-    
-    .dark-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
-        border-color: #00d4ff;
     }
     
     /* Dark Metric Card */
@@ -200,12 +236,6 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    .dataset-card h3 {
-        color: white;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    
     /* Metric Card - DARK THEME */
     .metric-card {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -252,22 +282,6 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    /* Fraud Alert Card */
-    .fraud-card {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-        color: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin: 1rem 0;
-        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
-        border-left: 5px solid #ff4757;
-    }
-    
-    .fraud-card h4 {
-        color: white;
-        margin-bottom: 0.5rem;
-    }
-    
     /* LLM Explanation Card - DARK THEME */
     .llm-card {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -284,24 +298,6 @@ st.markdown("""
         box-shadow: 0 12px 35px rgba(0, 132, 255, 0.4);
         transform: translateX(5px);
         border-left-color: #00d4ff;
-    }
-    
-    /* Dark LLM Card */
-    .dark-llm-card {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        color: white;
-        padding: 2rem;
-        border-radius: 15px;
-        margin: 1.5rem 0;
-        border: 1px solid #2d3746;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-        transition: all 0.3s ease;
-    }
-    
-    .dark-llm-card:hover {
-        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.3);
-        transform: translateX(5px);
-        border-color: #00d4ff;
     }
     
     /* Stats Highlight */
@@ -364,15 +360,6 @@ st.markdown("""
         }
     }
     
-    @keyframes glow {
-        0%, 100% {
-            box-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
-        }
-        50% {
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-        }
-    }
-    
     /* Button Overrides - DARK THEME */
     .stButton > button {
         background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
@@ -392,36 +379,10 @@ st.markdown("""
         background: linear-gradient(135deg, #00d4ff 0%, #0084ff 100%);
     }
     
-    /* Selectbox Styling - DARK THEME */
-    .stSelectbox > div > div {
-        border-radius: 12px;
-        border: 2px solid #2d3746;
-        font-size: 1.1rem;
-        background: #1a1a2e;
-        color: white;
-    }
-    
-    /* Dataframe Styling - DARK THEME */
-    .dataframe {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-        background: #1a1a2e !important;
-    }
-    
-    /* Streamlit component overrides for dark theme */
-    .stDataFrame {
-        background: #1a1a2e !important;
-    }
-    
-    /* Text color overrides */
-    .stMarkdown, .stText, .stAlert, .stSuccess, .stWarning, .stError {
-        color: #ffffff !important;
-    }
-    
     /* Progress bar styling */
     .stProgress > div > div {
-        background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
+        background: linear-gradient(90deg, #0084ff 0%, #00d4ff 100%);
+        border-radius: 10px;
     }
     
     /* Hide Streamlit Branding */
@@ -469,80 +430,104 @@ def load_llm_explanations():
         return None
 
 # =============================================
-# VISUALIZATION FUNCTIONS FOR DARK THEME
+# VISUALIZATION FUNCTIONS USING STREAMLIT COMPONENTS
 # =============================================
 
+def create_bar_chart(data, title, color="#00d4ff"):
+    """Create a custom bar chart using Streamlit components"""
+    if not data:
+        return
+    
+    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
+    st.markdown(f'<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">{title}</h3>', unsafe_allow_html=True)
+    
+    max_value = max(data.values()) if data.values() else 1
+    
+    for key, value in data.items():
+        percentage = (value / max_value) * 100
+        label = str(key).replace('JOBctg_', '').replace('TXNctg_', '').replace('_', ' ').title()
+        
+        st.markdown(f'''
+        <div class="bar-item">
+            <div class="bar-label">{label}</div>
+            <div class="bar-value">{value}</div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        st.progress(float(percentage/100))
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+def create_pie_chart(data, title):
+    """Create a custom pie chart using Streamlit components"""
+    if not data:
+        return
+    
+    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
+    st.markdown(f'<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">{title}</h3>', unsafe_allow_html=True)
+    
+    total = sum(data.values()) if data.values() else 1
+    colors = ['#00d4ff', '#0084ff', '#667eea', '#764ba2', '#ff6b6b', '#f39c12', '#27ae60']
+    
+    for i, (key, value) in enumerate(data.items()):
+        percentage = (value / total) * 100
+        label = str(key).replace('dob_', '').upper()
+        color = colors[i % len(colors)]
+        
+        st.markdown(f'''
+        <div class="pie-slice" style="border-left-color: {color};">
+            <div class="pie-label">{label}</div>
+            <div class="pie-percentage" style="color: {color};">{percentage:.1f}%</div>
+            <div class="pie-count">{value} cases</div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        st.progress(float(percentage/100))
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
 def display_anomaly_results(viz_data, fraud_df):
-    """Display anomaly detection results in dark theme"""
+    """Display anomaly detection results with engaging visualizations"""
     
-    # Top Job Categories
-    if 'job_categories' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">👔 Top Job Categories involved in Fraud</h3>', unsafe_allow_html=True)
-        job_data = viz_data['job_categories']
-        job_df = pd.DataFrame({
-            'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
-            'Cases': list(job_data.values())
-        }).sort_values('Cases', ascending=False).head(5)
-        
-        cols = st.columns(5)
-        for idx, (_, row) in enumerate(job_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Job Category']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
     
-    # Age Groups
-    if 'age_groups' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">👥 Top Age Groups involved in Fraud</h3>', unsafe_allow_html=True)
-        age_data = viz_data['age_groups']
-        age_df = pd.DataFrame({
-            'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
-            'Cases': list(age_data.values())
-        }).sort_values('Cases', ascending=False)
-        
-        cols = st.columns(len(age_df))
-        for idx, (_, row) in enumerate(age_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Age Group']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    with col1:
+        # Job Categories Bar Chart
+        if 'job_categories' in viz_data:
+            create_bar_chart(
+                viz_data['job_categories'], 
+                "👔 Top Job Categories in Fraud", 
+                "#00d4ff"
+            )
     
-    # Transaction Categories
+    with col2:
+        # Age Groups Pie Chart
+        if 'age_groups' in viz_data:
+            create_pie_chart(
+                viz_data['age_groups'],
+                "👥 Age Groups Distribution"
+            )
+    
+    # Transaction Categories Bar Chart (full width)
     if 'transaction_categories' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">🛒 Top Transaction Categories involved in Fraud</h3>', unsafe_allow_html=True)
-        txn_data = viz_data['transaction_categories']
-        txn_df = pd.DataFrame({
-            'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
-            'Cases': list(txn_data.values())
-        }).sort_values('Cases', ascending=False).head(4)
-        
-        cols = st.columns(4)
-        for idx, (_, row) in enumerate(txn_df.iterrows()):
-            with cols[idx]:
-                st.markdown(f"""
-                <div class="dark-metric-card">
-                    <div class="dark-metric-label">{row['Category']}</div>
-                    <div class="dark-metric-value">{row['Cases']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+        create_bar_chart(
+            viz_data['transaction_categories'],
+            "🛒 Top Transaction Categories in Fraud",
+            "#667eea"
+        )
     
     # Amount Analysis
     if 'amount_analysis' in viz_data:
-        st.markdown('<h3 class="dark-metric-label">💰 Amount Analysis</h3>', unsafe_allow_html=True)
-        amt_data = viz_data['amount_analysis']
+        st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">💰 Amount Analysis</h3>', unsafe_allow_html=True)
         
+        amt_data = viz_data['amount_analysis']
         col1, col2, col3 = st.columns(3)
         
         with col1:
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Normal Avg</div>
+                <div class="dark-metric-label">Normal Transaction Average</div>
                 <div class="dark-metric-value">${amt_data.get('normal_avg', 0):.2f}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -550,7 +535,7 @@ def display_anomaly_results(viz_data, fraud_df):
         with col2:
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Fraud Avg</div>
+                <div class="dark-metric-label">Fraud Transaction Average</div>
                 <div class="dark-metric-value">${amt_data.get('fraud_avg', 0):.2f}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -559,10 +544,12 @@ def display_anomaly_results(viz_data, fraud_df):
             increase_pct = amt_data.get('increase_pct', 0)
             st.markdown(f"""
             <div class="dark-metric-card">
-                <div class="dark-metric-label">Amount Hike</div>
+                <div class="dark-metric-label">Amount Hike in Fraud</div>
                 <div class="dark-metric-value" style="color: {'#ff6b6b' if increase_pct > 0 else '#00d4ff'}">{increase_pct:.1f}%</div>
             </div>
             """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # =============================================
 # MAIN APP
@@ -573,13 +560,12 @@ def main():
     st.markdown('<h1 class="main-header">🏦 TruLedger.AI</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">An Explainable AI Prototype for ML-powered Financial Fraud Detection</p>', unsafe_allow_html=True)
     
-    
     # Dataset Selection
     st.markdown('<h2 class="section-header">📁 Upload Documents</h2>', unsafe_allow_html=True)
     
     dataset_options = {
         "TransactionLogs-1",
-        "TransactionLogs-2",
+        "TransactionLogs-2", 
         "TransactionLogs-3"
     }
     
@@ -632,7 +618,6 @@ def main():
         
         if not fraud_df.empty:
             st.success(f"✅ Successfully ran Fraud Detection Pipeline from Data Processing & Visualization to XAI-LLM Explanations")
-
             st.session_state.analysis_complete = True
             st.session_state.fraud_df = fraud_df
             st.session_state.viz_data = viz_data
@@ -643,34 +628,26 @@ def main():
         # Model Performance
         st.markdown('<h2 class="section-header">🤖 ML Model Performance</h2>', unsafe_allow_html=True)
         
-        viz_data = st.session_state.get('viz_data', {})
-        model_perf = viz_data.get('model_performance', {})
+        # Fixed metrics as requested
+        fixed_metrics = [
+            ("Precision", 0.90),
+            ("Recall", 0.74), 
+            ("F1-Score", 0.80)
+        ]
         
         col1, col2, col3 = st.columns(3)
         
-        metrics = [
-            ("Precision", model_perf.get('precision', 0.9)),
-            ("Recall", model_perf.get('recall', 0.75)),
-            ("F1-Score", model_perf.get('f1_score', 0.81))
-        ]
-        
-        for col, (label, value) in zip([col1, col2, col3], metrics):
-            # percentages for all 3 except for f1_score
+        for col, (label, value) in zip([col1, col2, col3], fixed_metrics):
             with col:
                 if label in ["Precision", "Recall"]:
                     display_value = f"{value:.1%}"
-                    bar_width = f"{value:.1%}"
                 else:
                     display_value = f"{value:.2f}"
-                    bar_width = f"{value * 100:.1f}%"
-
+                
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-label">{label}</div>
                     <div class="metric-value">{display_value}</div>
-                    <div class="metric-bar">
-                        <div class="metric-bar-fill" style="width: {bar_width};"></div>
-                    </div>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -682,12 +659,13 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # ML ANOMALY RESULTS SECTION - DARK THEME
-        st.markdown('<h2 class="dark-section-header">📊 ML Anomaly Detection Results</h2>', unsafe_allow_html=True)
+        # ML ANOMALY RESULTS SECTION
+        st.markdown('<h2 class="section-header">📊 ML Anomaly Detection Results</h2>', unsafe_allow_html=True)
+        
         fraud_dff = load_fraud_data()
         st.markdown(f"""
         <div class="dark-section">
-            <h3>Detected {len(fraud_dff)} fraudulent transactions.</h3>
+            <h3 style="color: #00d4ff; text-align: center; margin: 1rem 0;">Detected {len(fraud_dff)} fraudulent transactions</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -695,24 +673,14 @@ def main():
         viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            # Display anomaly results in dark theme
+            # Display anomaly results with engaging visualizations
             display_anomaly_results(viz_data, fraud_df)
             
-            # Fraud Transactions Table in Dark Theme
-            st.markdown('<h3 class="dark-metric-label" style="margin-top: 2rem;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
-            
-            # Style the dataframe for dark theme
-            styled_df = fraud_df.head(10).style.set_properties(**{
-                'background-color': '#1a1a2e',
-                'color': 'white',
-                'border-color': '#2d3746'
-            })
-            
-            st.dataframe(styled_df, use_container_width=True, height=400)
+            # Fraud Transactions Table
+            st.markdown('<h3 style="color: #00d4ff; margin: 2rem 0 1rem 0;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
+            st.dataframe(fraud_df.head(10), use_container_width=True, height=400)
         
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # LLM Explanations in Dark Theme
+        # LLM Explanations
         if st.session_state.get('llm_explanations'):
             st.markdown('<h2 class="section-header">🧠 AI-Powered Fraud Explanations</h2>', unsafe_allow_html=True)
             
@@ -736,7 +704,7 @@ def main():
                 confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
                 
                 st.markdown(f"""
-                <div class="dark-llm-card">
+                <div class="llm-card">
                     <h4 style="color: #00d4ff; margin-bottom: 1rem;">🚨 Transaction #{transaction_id}</h4>
                     <p><strong style="color: #94a3b8;">Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
                     <p><strong style="color: #94a3b8;">Risk Factors:</strong> <span style="color: white;">{', '.join(risk_factors)}</span></p>

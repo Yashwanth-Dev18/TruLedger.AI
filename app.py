@@ -687,9 +687,11 @@ def main():
         <span class="tech-badge">⚡ ML - Scikit-learn</span>
         <span class="tech-badge">💻 Core Language - Python & its Libraries</span>
         <span class="tech-badge">🤖 LLM Framework - LangChain</span>
-        <span class="tech-badge">🤖 AI Integration -llama 3.1</span>
-        <span class="tech-badge">💼 API - Groq API</span>
+        <span class="tech-badge">🤖 AI Integration - Llama 3.1</span>
+        <span class="tech-badge">🤖 AI API - Groq API</span>
         <span class="tech-badge">🚀 App Deployment - Streamlit</span>
+        <span class="tech-badge">🚀 API - JavaScript Object Notation</span>
+
     </div>
     """
     st.markdown(tech_html, unsafe_allow_html=True)

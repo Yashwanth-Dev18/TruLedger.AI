@@ -649,7 +649,7 @@ def main():
     # The LLM Explanations section of app.py
     # LLM Explanations Section with Pagination
     if st.session_state.get('llm_explanations'):
-        st.markdown('<h2 class="section-header">🔍 Detected Fraudulent Transactions with AI-powered LLM Explanations</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-header">🔍 Fraud Analysis with AI-powered LLM Explanations</h2>', unsafe_allow_html=True)
 
         explanations = st.session_state.get('llm_explanations', [])
 

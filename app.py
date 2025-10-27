@@ -535,7 +535,7 @@ def display_anomaly_results(viz_data, fraud_df):
 def main():
     # Header
     st.markdown('<h1 class="main-header">TruLedger.AI</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">An Explainable AI Prototype for ML-powered Financial Fraud Detection</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">An ML-powered Financial Fraud Detection Prototype with integrated Explainable AI</p>', unsafe_allow_html=True)
     
     # Dataset Selection
     st.markdown('<h2 class="section-header">🤝 Upload Documents</h2>', unsafe_allow_html=True)

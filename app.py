@@ -649,7 +649,7 @@ def main():
     # The LLM Explanations section of app.py
     # LLM Explanations Section with Pagination
     if st.session_state.get('llm_explanations'):
-        st.markdown('<h2 class="section-header">🔍 AI-Powered Fraud Analysis</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-header">🔍 Detected Fraudulent Transactions with AI-powered LLM Explanations</h2>', unsafe_allow_html=True)
 
         explanations = st.session_state.get('llm_explanations', [])
 
@@ -682,7 +682,7 @@ def main():
                     <strong style="color: #94a3b8;">Risk Indicators:</strong> 
                     <span style="color: white;">{', '.join(risk_factors)}</span>
                 </p>
-                <p style="text-align: center;"><strong style="color: #94a3b8;">Fraud Analysis:</strong></p>
+                <p style="text-align: center;"><strong style="color: #94a3b8;">AI-Generated Reasoning:</strong></p>
                 <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left; line-height: 1.6;">
                     {explanation_text}
                 </p>

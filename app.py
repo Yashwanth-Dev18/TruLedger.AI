@@ -56,7 +56,7 @@ st.markdown("""
     
     /* Header Styles */
     .main-header {
-        font-size: 12rem;
+        font-size: 20rem;
         font-weight: 800;
         text-align: center;
         margin-bottom: 0;
@@ -279,6 +279,16 @@ st.markdown("""
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     }
     
+    /* Dark Section stat */
+    .dark-section-stat {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        padding: 2rem 0.5rem;
+        border-radius: 20px;
+        margin: 1.5rem 0;
+        border: 1px solid #2d3746;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+            
     /* Animations */
     @keyframes fadeIn {
         from {
@@ -640,7 +650,7 @@ def main():
         
         fraud_dff = load_fraud_data()
         st.markdown(f"""
-        <div class="dark-section">
+        <div class="dark-section-stat">
             <h4 style="color: #00d4ff; text-align: center; margin: 1rem 0;">Detected {len(fraud_dff)} fraudulent transactions</h4>
         </div>
         """, unsafe_allow_html=True)

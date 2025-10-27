@@ -535,11 +535,10 @@ def main():
         "TransactionLogs-3"
     }
     
-    selected_key = st.selectbox(
-        "💡 Upload anything from Credit Card Transactions to Bank's Finance Records. :)                                                                           " \
-        "⚠️ This is a prototype. Please upload from pre-uploaded datasets to avoid formatting issues from users.",
+    selected_key = st.selectbox(                                                                           
+        "💡This is a prototype. Please upload from pre-uploaded datasets to avoid formatting issues from users.",
         options=list(dataset_options),
-        help="Choose a pre-uploaded dataset to run the pipeline on."
+        help="In the final version, you can can upload anything from Credit Card Transactions to Bank's Finance Records :)"
     )
     
     # Run Pipeline Button

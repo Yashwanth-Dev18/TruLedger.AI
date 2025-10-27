@@ -56,12 +56,12 @@ st.markdown("""
     
     /* Header Styles */
     .main-header {
-        font-size: 8rem;
+        font-size: 12rem;
         font-weight: 800;
         text-align: center;
         margin-bottom: 0;
         color: #ffffff;
-        padding: 2rem 0 0.5rem 0;
+        padding: 1rem 0 0.5rem 0;
         animation: fadeIn 1s ease-in;
     }
     
@@ -523,7 +523,7 @@ def display_anomaly_results(viz_data, fraud_df):
 
 def main():
     # Header
-    st.markdown('<h1 class="main-header">🏦 TruLedger.AI</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">TruLedger.AI</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">An Explainable AI Prototype for ML-powered Financial Fraud Detection</p>', unsafe_allow_html=True)
     
     # Dataset Selection

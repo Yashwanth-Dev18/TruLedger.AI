@@ -56,16 +56,14 @@ st.markdown("""
     
     /* Header Styles */
     .main-header {
-        font-size: 4rem;
+        font-size: 6rem;
         font-weight: 700;
         text-align: center;
         margin-bottom: 0;
-        background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #ffffff;
         padding: 2rem 0 0.5rem 0;
         animation: fadeIn 1s ease-in;
+        text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
     }
     
     .subtitle {

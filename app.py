@@ -99,62 +99,6 @@ st.markdown("""
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     }
     
-    /* Bar Chart Styles */
-    .bar-item {
-        background: rgba(0, 212, 255, 0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-left: 4px solid #00d4ff;
-        transition: all 0.3s ease;
-    }
-    
-    .bar-item:hover {
-        background: rgba(0, 212, 255, 0.2);
-        transform: translateX(5px);
-    }
-    
-    .bar-label {
-        font-weight: 600;
-        color: #94a3b8;
-        margin-bottom: 0.5rem;
-    }
-    
-    .bar-value {
-        font-weight: 700;
-        color: #00d4ff;
-        float: right;
-    }
-    
-    /* Pie Chart Styles */
-    .pie-slice {
-        background: rgba(0, 212, 255, 0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-left: 4px solid;
-        transition: all 0.3s ease;
-    }
-    
-    .pie-slice:hover {
-        transform: scale(1.02);
-    }
-    
-    .pie-label {
-        font-weight: 600;
-        color: #94a3b8;
-    }
-    
-    .pie-percentage {
-        font-weight: 700;
-        float: right;
-    }
-    
-    .pie-count {
-        color: #64748b;
-        font-size: 0.9rem;
-    }
-    
     /* Card Styles - DARK THEME */
     .card {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -379,12 +323,6 @@ st.markdown("""
         background: linear-gradient(135deg, #00d4ff 0%, #0084ff 100%);
     }
     
-    /* Progress bar styling */
-    .stProgress > div > div {
-        background: linear-gradient(90deg, #0084ff 0%, #00d4ff 100%);
-        border-radius: 10px;
-    }
-    
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -430,91 +368,106 @@ def load_llm_explanations():
         return None
 
 # =============================================
-# VISUALIZATION FUNCTIONS USING STREAMLIT COMPONENTS
+# VISUALIZATION FUNCTIONS USING STREAMLIT CHARTS
 # =============================================
 
-def create_bar_chart(data, title, color="#00d4ff"):
-    """Create a custom bar chart using Streamlit components"""
-    if not data:
+def create_job_categories_bar_chart(job_data):
+    """Create actual bar chart for job categories"""
+    if not job_data:
         return
     
-    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
-    st.markdown(f'<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">{title}</h3>', unsafe_allow_html=True)
+    # Convert to DataFrame for bar chart
+    job_df = pd.DataFrame({
+        'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
+        'Fraud Cases': list(job_data.values())
+    }).sort_values('Fraud Cases', ascending=False).head(5)
     
-    max_value = max(data.values()) if data.values() else 1
+    st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">👔 Top Job Categories in Fraud</h3>', unsafe_allow_html=True)
     
-    for key, value in data.items():
-        percentage = (value / max_value) * 100
-        label = str(key).replace('JOBctg_', '').replace('TXNctg_', '').replace('_', ' ').title()
-        
-        st.markdown(f'''
-        <div class="bar-item">
-            <div class="bar-label">{label}</div>
-            <div class="bar-value">{value}</div>
-        </div>
-        ''', unsafe_allow_html=True)
-        
-        st.progress(float(percentage/100))
+    # Create bar chart using Streamlit's native bar_chart
+    chart_data = job_df.set_index('Job Category')['Fraud Cases']
+    st.bar_chart(chart_data, use_container_width=True)
+    
+    # Show data table below chart
+    st.dataframe(job_df, use_container_width=True, hide_index=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+def create_age_groups_pie_chart(age_data):
+    """Create pie chart visualization for age groups"""
+    if not age_data:
+        return
+    
+    # Convert to DataFrame
+    age_df = pd.DataFrame({
+        'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
+        'Cases': list(age_data.values())
+    }).sort_values('Cases', ascending=False)
+    
+    st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">👥 Age Groups in Fraud</h3>', unsafe_allow_html=True)
+    
+    # Create a pie chart using bar chart (Streamlit doesn't have native pie charts)
+    # But we can display the data in an engaging way
+    total = sum(age_data.values())
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        # Use bar chart to show distribution
+        st.bar_chart(age_df.set_index('Age Group')['Cases'], use_container_width=True)
+    
+    with col2:
+        # Show percentages and counts
+        st.markdown("**Distribution:**")
+        for _, row in age_df.iterrows():
+            percentage = (row['Cases'] / total) * 100
+            st.markdown(f"**{row['Age Group']}:** {percentage:.1f}%")
+            st.markdown(f"({row['Cases']} cases)")
+            st.markdown("---")
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-def create_pie_chart(data, title):
-    """Create a custom pie chart using Streamlit components"""
-    if not data:
+def create_transaction_categories_bar_chart(txn_data):
+    """Create wide bar chart for transaction categories"""
+    if not txn_data:
         return
     
-    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
-    st.markdown(f'<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">{title}</h3>', unsafe_allow_html=True)
+    # Convert to DataFrame
+    txn_df = pd.DataFrame({
+        'Transaction Type': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
+        'Fraud Cases': list(txn_data.values())
+    }).sort_values('Fraud Cases', ascending=False).head(8)
     
-    total = sum(data.values()) if data.values() else 1
-    colors = ['#00d4ff', '#0084ff', '#667eea', '#764ba2', '#ff6b6b', '#f39c12', '#27ae60']
+    st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">🛒 Top Transaction Categories in Fraud</h3>', unsafe_allow_html=True)
     
-    for i, (key, value) in enumerate(data.items()):
-        percentage = (value / total) * 100
-        label = str(key).replace('dob_', '').upper()
-        color = colors[i % len(colors)]
-        
-        st.markdown(f'''
-        <div class="pie-slice" style="border-left-color: {color};">
-            <div class="pie-label">{label}</div>
-            <div class="pie-percentage" style="color: {color};">{percentage:.1f}%</div>
-            <div class="pie-count">{value} cases</div>
-        </div>
-        ''', unsafe_allow_html=True)
-        
-        st.progress(float(percentage/100))
+    # Create horizontal bar chart
+    chart_data = txn_df.set_index('Transaction Type')['Fraud Cases']
+    st.bar_chart(chart_data, use_container_width=True)
     
+    # Show detailed data
+    st.dataframe(txn_df, use_container_width=True, hide_index=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 def display_anomaly_results(viz_data, fraud_df):
-    """Display anomaly detection results with engaging visualizations"""
+    """Display anomaly detection results with actual charts"""
     
     col1, col2 = st.columns(2)
     
     with col1:
         # Job Categories Bar Chart
         if 'job_categories' in viz_data:
-            create_bar_chart(
-                viz_data['job_categories'], 
-                "👔 Top Job Categories in Fraud", 
-                "#00d4ff"
-            )
+            create_job_categories_bar_chart(viz_data['job_categories'])
     
     with col2:
         # Age Groups Pie Chart
         if 'age_groups' in viz_data:
-            create_pie_chart(
-                viz_data['age_groups'],
-                "👥 Age Groups Distribution"
-            )
+            create_age_groups_pie_chart(viz_data['age_groups'])
     
     # Transaction Categories Bar Chart (full width)
     if 'transaction_categories' in viz_data:
-        create_bar_chart(
-            viz_data['transaction_categories'],
-            "🛒 Top Transaction Categories in Fraud",
-            "#667eea"
-        )
+        create_transaction_categories_bar_chart(viz_data['transaction_categories'])
     
     # Amount Analysis
     if 'amount_analysis' in viz_data:
@@ -673,7 +626,7 @@ def main():
         viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            # Display anomaly results with engaging visualizations
+            # Display anomaly results with actual charts
             display_anomaly_results(viz_data, fraud_df)
             
             # Fraud Transactions Table

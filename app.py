@@ -586,7 +586,7 @@ def main():
     selected_key = st.selectbox(
         "💡 Upload anything from Credit Card Transactions to Bank's Finance Records! ",
         "⚠️ This is a prototype. Please upload from pre-uploaded datasets. Why? :- Due to potential data heterogenity conflicts.",
-        options=list(dataset_options.keys()),
+        options=list(dataset_options),
         help="Choose a pre-uploaded dataset to run the pipeline on."
     )
     

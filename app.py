@@ -634,7 +634,7 @@ def main():
         fraud_dff = load_fraud_data()
         st.markdown(f"""
         <div class="dark-section">
-            <h3 style="color: #00d4ff; text-align: center; margin: 1rem 0;">Detected {len(fraud_dff)} fraudulent transactions</h3>
+            <h4 style="color: #00d4ff; text-align: center; margin: 1rem 0;">Detected {len(fraud_dff)} fraudulent transactions</h4>
         </div>
         """, unsafe_allow_html=True)
         
@@ -708,7 +708,7 @@ def main():
         <span class="tech-badge">⚡ ML - TensorFlow</span>
         <span class="tech-badge">⚡ ML - Jupyter Notebook</span>
         <span class="tech-badge">⚡ ML - Scikit-learn</span>
-        <span class="tech-badge">🤖 ML - joblib & numpy</span>
+        <span class="tech-badge">💻 Core Language - Python & its Libraries</span>
         <span class="tech-badge">🤖 LLM Framework - LangChain</span>
         <span class="tech-badge">🤖 AI Integration -llama 3.1</span>
         <span class="tech-badge">💼 API - Groq API</span>

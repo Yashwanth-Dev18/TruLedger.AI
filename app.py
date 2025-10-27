@@ -527,7 +527,7 @@ def main():
     st.markdown('<p class="subtitle">An Explainable AI Prototype for ML-powered Financial Fraud Detection</p>', unsafe_allow_html=True)
     
     # Dataset Selection
-    st.markdown('<h2 class="section-header">📁 Upload Documents</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header">🤝 Upload Documents</h2>', unsafe_allow_html=True)
     
     dataset_options = {
         "TransactionLogs-1",

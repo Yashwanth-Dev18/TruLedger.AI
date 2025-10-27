@@ -33,7 +33,7 @@ st.set_page_config(
 )
 
 # =============================================
-# ENHANCED CSS STYLING
+# ENHANCED CSS STYLING WITH DARK ML SECTION
 # =============================================
 
 st.markdown("""
@@ -81,6 +81,18 @@ st.markdown("""
         animation: slideInLeft 0.5s ease-out;
     }
     
+    /* Dark Section Header */
+    .dark-section-header {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #00d4ff;
+        margin: 2rem 0 1.5rem 0;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #00d4ff;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+    
     /* Card Styles */
     .card {
         background: white;
@@ -95,6 +107,57 @@ st.markdown("""
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 40px rgba(0, 132, 255, 0.15);
+    }
+    
+    /* Dark Theme Cards */
+    .dark-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        margin: 1.5rem 0;
+        border: 1px solid #2d3746;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .dark-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        border-color: #00d4ff;
+    }
+    
+    /* Dark Metric Card */
+    .dark-metric-card {
+        background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin: 1rem;
+        border: 1px solid #2d3746;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .dark-metric-card:hover {
+        transform: translateY(-5px);
+        border-color: #0084ff;
+        box-shadow: 0 12px 35px rgba(0, 132, 255, 0.3);
+    }
+    
+    .dark-metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #00d4ff;
+        margin: 0.5rem 0;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+    
+    .dark-metric-label {
+        font-size: 1rem;
+        color: #94a3b8;
+        font-weight: 500;
     }
     
     /* Tech Badge Styles */
@@ -206,6 +269,24 @@ st.markdown("""
         transform: translateX(5px);
     }
     
+    /* Dark LLM Card */
+    .dark-llm-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 1.5rem 0;
+        border: 1px solid #2d3746;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .dark-llm-card:hover {
+        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.2);
+        transform: translateX(5px);
+        border-color: #00d4ff;
+    }
+    
     /* Stats Highlight */
     .stats-highlight {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -221,6 +302,16 @@ st.markdown("""
         color: white;
         font-size: 2rem;
         margin-bottom: 1rem;
+    }
+    
+    /* Dark Section Background */
+    .dark-section {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        padding: 3rem 2rem;
+        border-radius: 25px;
+        margin: 3rem 0;
+        border: 1px solid #2d3746;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     }
     
     /* Animations */
@@ -255,6 +346,15 @@ st.markdown("""
         }
     }
     
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+        }
+    }
+    
     /* Button Overrides */
     .stButton > button {
         background: linear-gradient(135deg, #0084ff 0%, #00d4ff 100%);
@@ -285,6 +385,15 @@ st.markdown("""
         border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Dark Dataframe */
+    .dark-dataframe {
+        background: #1a1a2e !important;
+        color: white !important;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
     
     /* Hide Streamlit Branding */
@@ -329,6 +438,102 @@ def load_llm_explanations():
     except Exception as e:
         st.error(f"Error loading LLM explanations: {e}")
         return None
+
+# =============================================
+# VISUALIZATION FUNCTIONS FOR DARK THEME
+# =============================================
+
+def display_anomaly_results(viz_data, fraud_df):
+    """Display anomaly detection results in dark theme"""
+    
+    # Top Job Categories
+    if 'job_categories' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">👔 Top Job Categories in Fraud</h3>', unsafe_allow_html=True)
+        job_data = viz_data['job_categories']
+        job_df = pd.DataFrame({
+            'Job Category': [str(key).replace('JOBctg_', '').replace('_', ' ') for key in job_data.keys()],
+            'Cases': list(job_data.values())
+        }).sort_values('Cases', ascending=False).head(5)
+        
+        cols = st.columns(5)
+        for idx, (_, row) in enumerate(job_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Job Category']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    # Age Groups
+    if 'age_groups' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">👥 Age Groups Distribution</h3>', unsafe_allow_html=True)
+        age_data = viz_data['age_groups']
+        age_df = pd.DataFrame({
+            'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
+            'Cases': list(age_data.values())
+        }).sort_values('Cases', ascending=False)
+        
+        cols = st.columns(len(age_df))
+        for idx, (_, row) in enumerate(age_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Age Group']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    # Transaction Categories
+    if 'transaction_categories' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">🛒 Top Transaction Categories</h3>', unsafe_allow_html=True)
+        txn_data = viz_data['transaction_categories']
+        txn_df = pd.DataFrame({
+            'Category': [str(key).replace('TXNctg_', '').replace('_', ' ') for key in txn_data.keys()],
+            'Cases': list(txn_data.values())
+        }).sort_values('Cases', ascending=False).head(4)
+        
+        cols = st.columns(4)
+        for idx, (_, row) in enumerate(txn_df.iterrows()):
+            with cols[idx]:
+                st.markdown(f"""
+                <div class="dark-metric-card">
+                    <div class="dark-metric-label">{row['Category']}</div>
+                    <div class="dark-metric-value">{row['Cases']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    # Amount Analysis
+    if 'amount_analysis' in viz_data:
+        st.markdown('<h3 class="dark-metric-label">💰 Amount Analysis</h3>', unsafe_allow_html=True)
+        amt_data = viz_data['amount_analysis']
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown(f"""
+            <div class="dark-metric-card">
+                <div class="dark-metric-label">Normal Avg</div>
+                <div class="dark-metric-value">${amt_data.get('normal_avg', 0):.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="dark-metric-card">
+                <div class="dark-metric-label">Fraud Avg</div>
+                <div class="dark-metric-value">${amt_data.get('fraud_avg', 0):.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            increase_pct = amt_data.get('increase_pct', 0)
+            st.markdown(f"""
+            <div class="dark-metric-card">
+                <div class="dark-metric-label">Amount Hike</div>
+                <div class="dark-metric-value" style="color: {'#ff6b6b' if increase_pct > 0 else '#00d4ff'}">{increase_pct:.1f}%</div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # =============================================
 # MAIN APP
@@ -462,21 +667,48 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Fraud Transactions
-        st.markdown('<h2 class="section-header">🚨 Detected Fraud Transactions</h2>', unsafe_allow_html=True)
+        # ML ANOMALY RESULTS SECTION - DARK THEME
+        st.markdown('<div class="dark-section">', unsafe_allow_html=True)
+        st.markdown('<h2 class="dark-section-header">📊 ML Anomaly Detection Results</h2>', unsafe_allow_html=True)
+        
         fraud_df = st.session_state.get('fraud_df', pd.DataFrame())
+        viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            st.dataframe(fraud_df.head(10), use_container_width=True, height=400)
+            # Display anomaly results in dark theme
+            display_anomaly_results(viz_data, fraud_df)
+            
+            # Fraud Transactions Table in Dark Theme
+            st.markdown('<h3 class="dark-metric-label" style="margin-top: 2rem;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
+            
+            # Style the dataframe for dark theme
+            styled_df = fraud_df.head(10).style.set_properties(**{
+                'background-color': '#1a1a2e',
+                'color': 'white',
+                'border-color': '#2d3746'
+            })
+            
+            st.dataframe(styled_df, use_container_width=True, height=400)
         
-        # LLM Explanations
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # LLM Explanations in Dark Theme
         if st.session_state.get('llm_explanations'):
             st.markdown('<h2 class="section-header">🧠 AI-Powered Fraud Explanations</h2>', unsafe_allow_html=True)
             
             explanations = st.session_state.get('llm_explanations', [])
+            current_page = st.session_state.get('current_explanation_page', 0)
+            items_per_page = 6
             
-            for i, explanation in enumerate(explanations[:5]):
-                transaction_id = explanation.get('transaction_id', i + 1)
+            # Calculate pagination
+            start_idx = current_page * items_per_page
+            end_idx = start_idx + items_per_page
+            current_explanations = explanations[start_idx:end_idx]
+            total_pages = (len(explanations) + items_per_page - 1) // items_per_page
+            
+            # Display current page explanations
+            for i, explanation in enumerate(current_explanations):
+                transaction_id = explanation.get('transaction_id', i + start_idx + 1)
                 risk_factors = explanation.get('risk_factors', [])
                 confidence = explanation.get('confidence', 'medium')
                 explanation_text = explanation.get('explanation', 'No explanation available')
@@ -484,13 +716,30 @@ def main():
                 confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
                 
                 st.markdown(f"""
-                <div class="llm-card">
-                    <h4>🚨 Transaction #{transaction_id}</h4>
-                    <p><strong>Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
-                    <p><strong>Risk Factors:</strong> {', '.join(risk_factors)}</p>
-                    <p><strong>AI Explanation:</strong> {explanation_text}</p>
+                <div class="dark-llm-card">
+                    <h4 style="color: #00d4ff; margin-bottom: 1rem;">🚨 Transaction #{transaction_id}</h4>
+                    <p><strong style="color: #94a3b8;">Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
+                    <p><strong style="color: #94a3b8;">Risk Factors:</strong> <span style="color: white;">{', '.join(risk_factors)}</span></p>
+                    <p><strong style="color: #94a3b8;">AI Explanation:</strong></p>
+                    <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff;">{explanation_text}</p>
                 </div>
                 """, unsafe_allow_html=True)
+            
+            # Pagination controls
+            if total_pages > 1:
+                col1, col2, col3 = st.columns([1, 2, 1])
+                with col1:
+                    if current_page > 0:
+                        if st.button("⬅️ Previous", key="prev_llm"):
+                            st.session_state.current_explanation_page -= 1
+                            st.rerun()
+                with col2:
+                    st.markdown(f'<p style="text-align: center; color: #64748b;">Page {current_page + 1} of {total_pages}</p>', unsafe_allow_html=True)
+                with col3:
+                    if end_idx < len(explanations):
+                        if st.button("Next ➡️", key="next_llm"):
+                            st.session_state.current_explanation_page += 1
+                            st.rerun()
     
     # Footer
     st.markdown("---")

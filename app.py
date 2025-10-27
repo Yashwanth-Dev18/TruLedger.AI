@@ -645,58 +645,41 @@ def main():
             # Display anomaly results with centered charts stacked vertically
             display_anomaly_results(viz_data, fraud_df)
             
-            # Fraud Transactions Table
-            st.markdown('<h3 style="color: #00d4ff; margin: 2rem 0 1rem 0; text-align: center;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
-            st.dataframe(fraud_df.head(10), use_container_width=True, height=400)
         
-        # LLM Explanations
-        if st.session_state.get('llm_explanations'):
-            st.markdown('<h2 class="section-header">🧠 AI-Powered Fraud Explanations</h2>', unsafe_allow_html=True)
-            
-            explanations = st.session_state.get('llm_explanations', [])
-            current_page = st.session_state.get('current_explanation_page', 0)
-            items_per_page = 6
-            
-            # Calculate pagination
-            start_idx = current_page * items_per_page
-            end_idx = start_idx + items_per_page
-            current_explanations = explanations[start_idx:end_idx]
-            total_pages = (len(explanations) + items_per_page - 1) // items_per_page
-            
-            # Display current page explanations
-            for i, explanation in enumerate(current_explanations):
-                transaction_id = explanation.get('transaction_id', i + start_idx + 1)
-                risk_factors = explanation.get('risk_factors', [])
-                confidence = explanation.get('confidence', 'medium')
-                explanation_text = explanation.get('explanation', 'No explanation available')
-                
-                confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
-                
-                st.markdown(f"""
-                <div class="llm-card">
-                    <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
-                    <p style="text-align: center;"><strong style="color: #94a3b8;">Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
-                    <p style="text-align: center;"><strong style="color: #94a3b8;">Risk Factors:</strong> <span style="color: white;">{', '.join(risk_factors)}</span></p>
-                    <p style="text-align: center;"><strong style="color: #94a3b8;">AI Explanation:</strong></p>
-                    <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left;">{explanation_text}</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            # Pagination controls
-            if total_pages > 1:
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col1:
-                    if current_page > 0:
-                        if st.button("⬅️ Previous", key="prev_llm"):
-                            st.session_state.current_explanation_page -= 1
-                            st.rerun()
-                with col2:
-                    st.markdown(f'<p style="text-align: center; color: #94a3b8;">Page {current_page + 1} of {total_pages}</p>', unsafe_allow_html=True)
-                with col3:
-                    if end_idx < len(explanations):
-                        if st.button("Next ➡️", key="next_llm"):
-                            st.session_state.current_explanation_page += 1
-                            st.rerun()
+        # In the LLM Explanations section of app.py
+    if st.session_state.get('llm_explanations'):
+        st.markdown('<h2 class="section-header">🔍 Detected Fraud Transactions with AI-powered LLM Explanations</h2>', unsafe_allow_html=True)
+
+        explanations = st.session_state.get('llm_explanations', [])
+
+        for i, explanation in enumerate(explanations):
+            transaction_id = explanation.get('transaction_id', i + 1)
+            risk_factors = explanation.get('risk_factors', [])
+            confidence = explanation.get('confidence', 'high')
+            explanation_text = explanation.get('explanation', 'No explanation available')
+            explanation_type = explanation.get('explanation_type', 'AI-Generated Reasoning')
+
+            confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
+
+            st.markdown(f"""
+            <div class="llm-card">
+                <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
+                <p style="text-align: center;">
+                    <strong style="color: #94a3b8;">Confidence:</strong> 
+                    <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span> | 
+                    <strong style="color: #94a3b8;">Type:</strong> 
+                    <span style="color: white;">{explanation_type.replace('_', ' ').title()}</span>
+                </p>
+                <p style="text-align: center;">
+                    <strong style="color: #94a3b8;">Risk Factors:</strong> 
+                    <span style="color: white;">{', '.join(risk_factors)}</span>
+                </p>
+                <p style="text-align: center;"><strong style="color: #94a3b8;">AI Analysis:</strong></p>
+                <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left;">
+                    {explanation_text}
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
 
     # Technology Stack
     st.markdown('<h2 class="section-header">🛠️ Tech Stack</h2>', unsafe_allow_html=True)

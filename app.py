@@ -606,9 +606,9 @@ def main():
         
         # Fixed metrics as requested
         fixed_metrics = [
-            ("Precision", 0.904),
+            ("Precision", 0.902),
             ("Recall", 0.74), 
-            ("F1-Score", 0.801)
+            ("F1-Score", 0.81)
         ]
         
         col1, col2, col3 = st.columns(3)

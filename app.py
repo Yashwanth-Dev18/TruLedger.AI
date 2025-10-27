@@ -655,20 +655,14 @@ def main():
         for i, explanation in enumerate(explanations):
             transaction_id = explanation.get('transaction_id', i + 1)
             risk_factors = explanation.get('risk_factors', [])
-            confidence = explanation.get('confidence', 'high')
             explanation_text = explanation.get('explanation', 'No explanation available')
             explanation_type = explanation.get('explanation_type', 'ai_generated')
 
-            confidence_color = {'high': '#ff6b6b', 'medium': '#f39c12', 'low': '#27ae60'}.get(confidence, '#64748b')
 
             st.markdown(f"""
             <div class="llm-card">
-                <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id+1}</h4>
+                <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
                 <p style="text-align: center;">
-                    <strong style="color: #94a3b8;">Confidence:</strong> 
-                    <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span> | 
-                    <strong style="color: #94a3b8;">Type:</strong> 
-                    <span style="color: white;">{explanation_type.replace('_', ' ').title()}</span>
                 </p>
                 <p style="text-align: center;">
                     <strong style="color: #94a3b8;">Risk Factors:</strong> 

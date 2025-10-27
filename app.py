@@ -409,9 +409,16 @@ def create_age_groups_pie_chart(age_data):
     
     # Convert to DataFrame
     age_df = pd.DataFrame({
-        'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
-        'Cases': list(age_data.values())
-    }).sort_values('Cases', ascending=False)
+    'Age Group': [str(key).replace('dob_', '').upper() for key in age_data.keys()],
+    'Cases': list(age_data.values())
+      })
+
+    # Define the desired order from youngest to oldest
+    age_order = ['20S', '30S', '40S', '50S', '60S', '70S', '80S', '90S', '00S']
+
+    # Sort by this custom order
+    age_df['Age Group'] = pd.Categorical(age_df['Age Group'], categories=age_order, ordered=True)
+    age_df = age_df.sort_values('Age Group')
     
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">👥 Top Age Groups involved in Fraudulent Transactions</h3>', unsafe_allow_html=True)
@@ -426,11 +433,11 @@ def create_age_groups_pie_chart(age_data):
     
     # Show percentages and counts in a centered layout
     st.markdown("**Distribution:**")
-    
+
     # Create dynamic columns based on number of age groups
     num_age_groups = len(age_df)
     cols = st.columns(num_age_groups)  # This creates exactly as many columns as age groups
-    
+
     for idx, (_, row) in enumerate(age_df.iterrows()):
         percentage = (row['Cases'] / total) * 100
         with cols[idx]:

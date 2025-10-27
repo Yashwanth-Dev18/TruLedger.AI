@@ -403,7 +403,7 @@ def create_job_categories_bar_chart(job_data):
     st.markdown('</div>', unsafe_allow_html=True)
 
 def create_age_groups_pie_chart(age_data):
-    """Create pie chart visualization for age groups"""
+    """Create bar chart visualization for age groups"""
     if not age_data:
         return
     
@@ -426,10 +426,14 @@ def create_age_groups_pie_chart(age_data):
     
     # Show percentages and counts in a centered layout
     st.markdown("**Distribution:**")
-    cols = st.columns(3)
+    
+    # Create dynamic columns based on number of age groups
+    num_age_groups = len(age_df)
+    cols = st.columns(num_age_groups)  # This creates exactly as many columns as age groups
+    
     for idx, (_, row) in enumerate(age_df.iterrows()):
         percentage = (row['Cases'] / total) * 100
-        with cols[idx % 3]:
+        with cols[idx]:
             st.metric(
                 label=row['Age Group'],
                 value=f"{percentage:.1f}%",
@@ -595,9 +599,9 @@ def main():
         
         # Fixed metrics as requested
         fixed_metrics = [
-            ("Precision", 0.90),
+            ("Precision", 0.904),
             ("Recall", 0.74), 
-            ("F1-Score", 0.80)
+            ("F1-Score", 0.801)
         ]
         
         col1, col2, col3 = st.columns(3)

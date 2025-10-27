@@ -94,9 +94,19 @@ st.markdown("""
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         padding: 2rem;
         border-radius: 15px;
-        margin: 1rem 0;
+        margin: 2rem 0;
         border: 1px solid #2d3746;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        text-align: center;
+    }
+    
+    /* Centered Chart Container */
+    .centered-chart {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
     }
     
     /* Card Styles - DARK THEME */
@@ -385,9 +395,11 @@ def create_job_categories_bar_chart(job_data):
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">👔 Top Job Categories in Fraud</h3>', unsafe_allow_html=True)
     
-    # Create bar chart using Streamlit's native bar_chart
+    # Create centered bar chart
+    st.markdown('<div class="centered-chart">', unsafe_allow_html=True)
     chart_data = job_df.set_index('Job Category')['Fraud Cases']
     st.bar_chart(chart_data, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Show data table below chart
     st.dataframe(job_df, use_container_width=True, hide_index=True)
@@ -407,25 +419,27 @@ def create_age_groups_pie_chart(age_data):
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">👥 Age Groups in Fraud</h3>', unsafe_allow_html=True)
     
-    # Create a pie chart using bar chart (Streamlit doesn't have native pie charts)
-    # But we can display the data in an engaging way
     total = sum(age_data.values())
     
-    col1, col2 = st.columns([2, 1])
+    # Create centered visualization
+    st.markdown('<div class="centered-chart">', unsafe_allow_html=True)
     
-    with col1:
-        # Use bar chart to show distribution
-        st.bar_chart(age_df.set_index('Age Group')['Cases'], use_container_width=True)
+    # Use bar chart to show distribution
+    st.bar_chart(age_df.set_index('Age Group')['Cases'], use_container_width=True)
     
-    with col2:
-        # Show percentages and counts
-        st.markdown("**Distribution:**")
-        for _, row in age_df.iterrows():
-            percentage = (row['Cases'] / total) * 100
-            st.markdown(f"**{row['Age Group']}:** {percentage:.1f}%")
-            st.markdown(f"({row['Cases']} cases)")
-            st.markdown("---")
+    # Show percentages and counts in a centered layout
+    st.markdown("**Distribution:**")
+    cols = st.columns(3)
+    for idx, (_, row) in enumerate(age_df.iterrows()):
+        percentage = (row['Cases'] / total) * 100
+        with cols[idx % 3]:
+            st.metric(
+                label=row['Age Group'],
+                value=f"{percentage:.1f}%",
+                delta=f"{row['Cases']} cases"
+            )
     
+    st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 def create_transaction_categories_bar_chart(txn_data):
@@ -442,39 +456,40 @@ def create_transaction_categories_bar_chart(txn_data):
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">🛒 Top Transaction Categories in Fraud</h3>', unsafe_allow_html=True)
     
-    # Create horizontal bar chart
+    # Create centered horizontal bar chart
+    st.markdown('<div class="centered-chart">', unsafe_allow_html=True)
     chart_data = txn_df.set_index('Transaction Type')['Fraud Cases']
     st.bar_chart(chart_data, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Show detailed data
     st.dataframe(txn_df, use_container_width=True, hide_index=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 def display_anomaly_results(viz_data, fraud_df):
-    """Display anomaly detection results with actual charts"""
+    """Display anomaly detection results with centered charts stacked vertically"""
     
-    col1, col2 = st.columns(2)
+    # Job Categories Bar Chart - Full Width
+    if 'job_categories' in viz_data:
+        create_job_categories_bar_chart(viz_data['job_categories'])
     
-    with col1:
-        # Job Categories Bar Chart
-        if 'job_categories' in viz_data:
-            create_job_categories_bar_chart(viz_data['job_categories'])
+    # Age Groups Pie Chart - Full Width  
+    if 'age_groups' in viz_data:
+        create_age_groups_pie_chart(viz_data['age_groups'])
     
-    with col2:
-        # Age Groups Pie Chart
-        if 'age_groups' in viz_data:
-            create_age_groups_pie_chart(viz_data['age_groups'])
-    
-    # Transaction Categories Bar Chart (full width)
+    # Transaction Categories Bar Chart - Full Width
     if 'transaction_categories' in viz_data:
         create_transaction_categories_bar_chart(viz_data['transaction_categories'])
     
-    # Amount Analysis
+    # Amount Analysis - Full Width
     if 'amount_analysis' in viz_data:
         st.markdown('<div class="chart-container">', unsafe_allow_html=True)
         st.markdown('<h3 style="color: #00d4ff; text-align: center; margin-bottom: 1.5rem;">💰 Amount Analysis</h3>', unsafe_allow_html=True)
         
         amt_data = viz_data['amount_analysis']
+        
+        # Center the metrics
+        st.markdown('<div class="centered-chart">', unsafe_allow_html=True)
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -502,6 +517,7 @@ def display_anomaly_results(viz_data, fraud_df):
             </div>
             """, unsafe_allow_html=True)
         
+        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
 # =============================================
@@ -626,11 +642,11 @@ def main():
         viz_data = st.session_state.get('viz_data', {})
         
         if not fraud_df.empty:
-            # Display anomaly results with actual charts
+            # Display anomaly results with centered charts stacked vertically
             display_anomaly_results(viz_data, fraud_df)
             
             # Fraud Transactions Table
-            st.markdown('<h3 style="color: #00d4ff; margin: 2rem 0 1rem 0;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
+            st.markdown('<h3 style="color: #00d4ff; margin: 2rem 0 1rem 0; text-align: center;">🔍 Detected Fraud Transactions</h3>', unsafe_allow_html=True)
             st.dataframe(fraud_df.head(10), use_container_width=True, height=400)
         
         # LLM Explanations
@@ -658,11 +674,11 @@ def main():
                 
                 st.markdown(f"""
                 <div class="llm-card">
-                    <h4 style="color: #00d4ff; margin-bottom: 1rem;">🚨 Transaction #{transaction_id}</h4>
-                    <p><strong style="color: #94a3b8;">Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
-                    <p><strong style="color: #94a3b8;">Risk Factors:</strong> <span style="color: white;">{', '.join(risk_factors)}</span></p>
-                    <p><strong style="color: #94a3b8;">AI Explanation:</strong></p>
-                    <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff;">{explanation_text}</p>
+                    <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
+                    <p style="text-align: center;"><strong style="color: #94a3b8;">Confidence:</strong> <span style="color: {confidence_color}; font-weight: 700;">{confidence.upper()}</span></p>
+                    <p style="text-align: center;"><strong style="color: #94a3b8;">Risk Factors:</strong> <span style="color: white;">{', '.join(risk_factors)}</span></p>
+                    <p style="text-align: center;"><strong style="color: #94a3b8;">AI Explanation:</strong></p>
+                    <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left;">{explanation_text}</p>
                 </div>
                 """, unsafe_allow_html=True)
             
@@ -705,7 +721,7 @@ def main():
     <div style='text-align: center; color: #94a3b8; padding: 2rem; font-size: 0.9rem;'>
         <p style='font-weight: 600; font-size: 1.1rem; color: #00d4ff;'>Developed by Yashwanth Krishna Devanaboina</p>
         <p>AI/ML Engineer | Software Developer | CS student at Lnu | AWS Certified Cloud Practitioner | Cisco Certified Data Analyst</p>
-        <p style='margin-top: 1rem;'>© 2024 TruLedger.AI | Enterprise-Grade Fraud Detection</p>
+        <p style='margin-top: 1rem;'>© 2025 TruLedger.AI | Enterprise-Grade Fraud Detection</p>
     </div>
     """, unsafe_allow_html=True)
 

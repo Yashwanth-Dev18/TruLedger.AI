@@ -646,34 +646,82 @@ def main():
             display_anomaly_results(viz_data, fraud_df)
             
         
-        # In the LLM Explanations section of app.py
+    # The LLM Explanations section of app.py
+    # LLM Explanations Section with Pagination
     if st.session_state.get('llm_explanations'):
-        st.markdown('<h2 class="section-header">🔍 Detected Fraud Transactions with AI-powered LLM Explanations</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-header">🔍 AI-Powered Fraud Analysis</h2>', unsafe_allow_html=True)
 
         explanations = st.session_state.get('llm_explanations', [])
 
-        for i, explanation in enumerate(explanations):
-            transaction_id = explanation.get('transaction_id', i + 1)
-            risk_factors = explanation.get('risk_factors', [])
-            explanation_text = explanation.get('explanation', 'No explanation available')
-            explanation_type = explanation.get('explanation_type', 'ai_generated')
+        # Pagination settings
+        items_per_page = 6
+        total_pages = (len(explanations) + items_per_page - 1) // items_per_page
 
+        # Initialize current page in session state
+        if 'current_explanation_page' not in st.session_state:
+            st.session_state.current_explanation_page = 0
+
+        current_page = st.session_state.current_explanation_page
+
+        # Calculate slice for current page
+        start_idx = current_page * items_per_page
+        end_idx = min(start_idx + items_per_page, len(explanations))
+        current_explanations = explanations[start_idx:end_idx]
+
+        # Display current page explanations
+        for explanation in current_explanations:
+            transaction_id = explanation.get('transaction_id', 0)
+            risk_factors = explanation.get('risk_factors', [])
+            explanation_text = explanation.get('explanation', 'No analysis available')
+            explanation_type = explanation.get('explanation_type', 'ai_analysis')
 
             st.markdown(f"""
             <div class="llm-card">
                 <h4 style="color: #00d4ff; margin-bottom: 1rem; text-align: center;">🚨 Transaction #{transaction_id}</h4>
                 <p style="text-align: center;">
-                </p>
-                <p style="text-align: center;">
-                    <strong style="color: #94a3b8;">Risk Factors:</strong> 
+                    <strong style="color: #94a3b8;">Risk Indicators:</strong> 
                     <span style="color: white;">{', '.join(risk_factors)}</span>
                 </p>
-                <p style="text-align: center;"><strong style="color: #94a3b8;">AI-Generated Reasoning:</strong></p>
-                <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left;">
+                <p style="text-align: center;"><strong style="color: #94a3b8;">Fraud Analysis:</strong></p>
+                <p style="color: #e2e8f0; background: rgba(0, 212, 255, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 3px solid #00d4ff; text-align: left; line-height: 1.6;">
                     {explanation_text}
                 </p>
             </div>
             """, unsafe_allow_html=True)
+
+        # Pagination controls at the bottom
+        if total_pages > 1:
+            st.markdown("---")
+            col1, col2, col3, col4, col5 = st.columns([2, 1, 2, 1, 2])
+
+            with col1:
+                if current_page > 0:
+                    if st.button("⬅️ Previous Page", use_container_width=True):
+                        st.session_state.current_explanation_page -= 1
+                        st.rerun()
+
+            with col3:
+                st.markdown(f'<p style="text-align: center; color: #94a3b8; margin: 0.5rem 0;">Page {current_page + 1} of {total_pages}<br>Showing {start_idx + 1}-{end_idx} of {len(explanations)} transactions</p>', unsafe_allow_html=True)
+
+            with col5:
+                if current_page < total_pages - 1:
+                    if st.button("Next Page ➡️", use_container_width=True):
+                        st.session_state.current_explanation_page += 1
+                        st.rerun()
+
+            # Quick page jump
+            st.markdown('<div style="text-align: center; margin-top: 1rem;">', unsafe_allow_html=True)
+            page_options = list(range(1, total_pages + 1))
+            selected_page = st.selectbox(
+                "Jump to page:",
+                options=page_options,
+                index=current_page,
+                key="page_jump"
+            )
+            if selected_page - 1 != current_page:
+                st.session_state.current_explanation_page = selected_page - 1
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # Technology Stack
     st.markdown('<h2 class="section-header">🛠️ Tech Stack</h2>', unsafe_allow_html=True)

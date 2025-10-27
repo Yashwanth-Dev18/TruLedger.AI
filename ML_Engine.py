@@ -258,7 +258,7 @@ def generate_visualization_data(df, fraud_mask, fraud_proba=None):
 
 # Then add this function to ML_Engine.py
 def generate_fraud_explanations(fraud_df_path='detected_fraud_transactions.csv'):
-    """Generate LLM explanations for detected fraud transactions"""
+    """Generate LLM explanations for ALL detected fraud transactions"""
     try:
         from LLM_XAI import FraudExplainer
         
@@ -273,11 +273,11 @@ def generate_fraud_explanations(fraud_df_path='detected_fraud_transactions.csv')
             print("❌ No fraud transactions to explain")
             return False
         
-        # Initialize explainer (without API key - will use rule-based)
+        # Initialize explainer
         explainer = FraudExplainer()
         
-        # Generate explanations
-        explanations = explainer.generate_batch_explanations(fraud_df, max_explanations=10)
+        # Generate explanations for ALL transactions (not limited to 10)
+        explanations = explainer.generate_batch_explanations(fraud_df)
         
         # Save explanations
         output_data = {
@@ -289,11 +289,13 @@ def generate_fraud_explanations(fraud_df_path='detected_fraud_transactions.csv')
         with open('llm_fraud_explanations.json', 'w') as f:
             json.dump(output_data, f, indent=2)
         
-        print(f"💾 Generated {len(explanations)} fraud explanations")
+        print(f"💾 Generated {len(explanations)} fraud explanations for all detected transactions")
         return True
         
     except Exception as e:
         print(f"❌ Error generating fraud explanations: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 

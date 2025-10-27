@@ -632,7 +632,7 @@ def main():
         
         if not fraud_df.empty:
             st.success(f"✅ Successfully ran Fraud Detection Pipeline from Data Processing & Visualization to XAI-LLM Explanations")
-            f_count = len(fraud_df)
+
             st.session_state.analysis_complete = True
             st.session_state.fraud_df = fraud_df
             st.session_state.viz_data = viz_data
@@ -684,10 +684,10 @@ def main():
         
         # ML ANOMALY RESULTS SECTION - DARK THEME
         st.markdown('<h2 class="dark-section-header">📊 ML Anomaly Detection Results</h2>', unsafe_allow_html=True)
-
+        fraud_dff = load_fraud_data()
         st.markdown(f"""
         <div class="dark-section">
-            <h3>Detected {f_count} fraudulent transactions.</h3>
+            <h3>Detected {len(fraud_dff)} fraudulent transactions.</h3>
         </div>
         """, unsafe_allow_html=True)
         

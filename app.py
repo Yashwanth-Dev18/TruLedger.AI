@@ -83,7 +83,6 @@ st.markdown("""
         padding-bottom: 0.75rem;
         border-bottom: 3px solid #0084ff;
         animation: slideInLeft 0.5s ease-out;
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
     
     /* Chart Container */
